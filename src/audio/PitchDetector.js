@@ -23,6 +23,9 @@ class PitchDetector {
   async init() {
     return new Promise((resolve, reject) => {
       try {
+        // eslint-disable-next-line no-console
+        console.log('Initializing PitchDetector worker...');
+
         // Create Web Worker
         this.worker = new Worker(
           new URL('./PitchDetector.worker.js', import.meta.url),
@@ -37,10 +40,14 @@ class PitchDetector {
         // Handle worker errors
         this.worker.onerror = (error) => {
           console.error('PitchDetector Worker Error:', error);
+          reject(new Error(`Worker error: ${error.message}`));
         };
 
         // Initialize worker with sample rate
         const sampleRate = this.audioContextManager.getSampleRate();
+        // eslint-disable-next-line no-console
+        console.log('Sending init message to worker, sampleRate:', sampleRate);
+
         this.worker.postMessage({
           type: 'init',
           data: {
@@ -52,7 +59,11 @@ class PitchDetector {
 
         // Wait for initialization confirmation
         const checkInit = (e) => {
+          // eslint-disable-next-line no-console
+          console.log('Worker message received:', e.data);
           if (e.data.type === 'initialized') {
+            // eslint-disable-next-line no-console
+            console.log('Worker initialized successfully');
             this.isInitialized = true;
             this.worker.removeEventListener('message', checkInit);
             resolve();
