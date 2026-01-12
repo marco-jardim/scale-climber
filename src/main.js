@@ -12,16 +12,19 @@ import KeyboardControls from './utils/KeyboardControls.js';
 import AccessibilitySettings from './utils/AccessibilitySettings.js';
 import AudioFeedback from './utils/AudioFeedback.js';
 import ReferenceToneGenerator from './utils/ReferenceToneGenerator.js';
+import TitleScreenManager from './game/TitleScreenManager.js';
 
 // Global state
 let gameEngine = null;
 let renderer = null;
 let audioFeedback = null;
+let titleScreenManager = null;
 
 // Screen management
 const screens = {
   loading: document.getElementById('loading-screen'),
-  start: document.getElementById('start-screen'),
+  start: document.getElementById('start-screen'), // Keeps compatibility if we fall back
+  'title-screen-layer': document.getElementById('title-screen-layer'),
   'calibration-ready': document.getElementById('calibration-ready-screen'),
   calibration: document.getElementById('calibration-screen'),
   game: document.getElementById('game-screen'),
@@ -34,9 +37,27 @@ const screens = {
  * @param {string} screenName - Name of screen to show
  */
 function showScreen(screenName) {
-  Object.values(screens).forEach((screen) => screen.classList.remove('active'));
-  if (screens[screenName]) {
-    screens[screenName].classList.add('active');
+  Object.values(screens).forEach((screen) => {
+    if (screen) screen.classList.remove('active');
+  });
+
+  // Special case: Title Screen uses a different class/display logic usually,
+  // but for consistency we use .active if the CSS supports it.
+  // The title screen styles I added didn't specify .active behavior explicitly for the layer,
+  // but let's assume standard behavior.
+  // Actually, my CSS for #title-screen-layer has display: flex by default.
+  // I should control it via hidden class or display property.
+
+  const target = screens[screenName];
+  if (target) {
+    if (screenName === 'title-screen-layer') {
+      target.style.display = 'flex';
+    } else {
+      target.classList.add('active');
+      if (screens['title-screen-layer']) {
+        screens['title-screen-layer'].style.display = 'none';
+      }
+    }
   }
 
   // Start/stop renderer based on screen
@@ -277,7 +298,9 @@ document.getElementById('begin-calibration-button')?.addEventListener('click', (
 
 document.getElementById('cancel-calibration-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  showScreen('start');
+  // Return to title screen if canceled
+  showScreen('title-screen-layer');
+  if (titleScreenManager) titleScreenManager.startLoop();
 });
 
 document.getElementById('practice-button')?.addEventListener('click', () => {
@@ -299,17 +322,20 @@ document.getElementById('play-again-button')?.addEventListener('click', () => {
 
 document.getElementById('menu-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  showScreen('start');
+  // Go back to title screen
+  showScreen('title-screen-layer');
+  if (titleScreenManager) titleScreenManager.startLoop();
 });
 
 document.getElementById('error-menu-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  showScreen('start');
+  showScreen('title-screen-layer');
+  if (titleScreenManager) titleScreenManager.startLoop();
 });
 
 document.getElementById('retry-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  showScreen('start');
+  showCalibrationReady(); // Or restart last mode
 });
 
 document.getElementById('pause-button')?.addEventListener('click', () => {
@@ -359,13 +385,8 @@ async function initializeApp() {
     // eslint-disable-next-line no-console
     console.log('Reference tone generator initialized');
 
-    // Initialize game engine
+    // Initialize game engine (BUT DO NOT START AUDIO YET)
     gameEngine = new GameEngine();
-    const initResult = await gameEngine.initialize();
-
-    if (!initResult.success) {
-      throw new Error(initResult.error || 'Failed to initialize game engine');
-    }
 
     // Add mute toggle to game engine
     gameEngine.toggleMute = () => {
@@ -375,7 +396,7 @@ async function initializeApp() {
 
     gameEngine.restart = () => {
       // Reset game state and restart
-      showScreen('start');
+      showCalibrationReady();
     };
 
     // Initialize renderer
@@ -398,12 +419,20 @@ async function initializeApp() {
     // eslint-disable-next-line no-console
     console.log('Keyboard controls initialized');
 
+    // Initialize Title Screen Manager
+    titleScreenManager = new TitleScreenManager(gameEngine);
+    titleScreenManager.init('title-screen-layer', () => {
+      // Transition to Game Flow
+      showCalibrationReady();
+    });
+
     // eslint-disable-next-line no-console
     console.log('Scale Climber initialized successfully');
 
-    // Show start screen
+    // Show title screen
     setTimeout(() => {
-      showScreen('start');
+      showScreen('title-screen-layer');
+      document.getElementById('loading-screen').classList.remove('active');
     }, 500);
   } catch (error) {
     console.error('Failed to initialize app:', error);

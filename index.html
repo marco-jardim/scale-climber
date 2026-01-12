@@ -22,6 +22,35 @@
     <!-- Skip to main content link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <!-- New Title Screen (Basecamp at Night) -->
+    <div id="title-screen-layer" class="screen" role="region" aria-label="Title Screen">
+      <canvas id="title-canvas"></canvas>
+      <div class="title-ui-overlay">
+        <div class="header-row">
+          <span class="brand">Scale Climber</span>
+          <div class="header-actions">
+            <button class="icon-btn" title="Daily Route">Daily Route</button>
+            <button class="icon-btn" title="Practice">Practice</button>
+            <button class="icon-btn" title="Settings">Settings</button>
+          </div>
+        </div>
+
+        <div class="center-panel">
+          <h1 id="ts-headline">Scale Climber</h1>
+          <p id="ts-subhead">Sing the scale. Climb the mountain.</p>
+
+          <div class="cta-container">
+            <button id="ts-cta-btn" class="primary-morph-btn">Enable Mic</button>
+            <p id="ts-cta-helper" class="helper-text">We'll listen for pitch in real time.</p>
+          </div>
+
+          <div id="ts-voice-hint" class="voice-hint"></div>
+        </div>
+
+        <div id="ts-sr-status" class="sr-only" aria-live="polite"></div>
+      </div>
+    </div>
+
     <div id="loading-screen" class="screen active" role="status" aria-live="polite">
       <h1>🎵 Scale Climber</h1>
       <p>Loading game...</p>
