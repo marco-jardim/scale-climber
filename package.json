@@ -26,16 +26,16 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.40.1",
-    "@vitest/coverage-v8": "^1.1.0",
-    "@vitest/ui": "^1.1.0",
+    "@vitest/coverage-v8": "^4.0.17",
+    "@vitest/ui": "^4.0.17",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^27.4.0",
     "prettier": "^3.1.1",
-    "vite": "^5.0.10",
+    "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0",
-    "vitest": "^1.1.0",
+    "vitest": "^4.0.17",
     "workbox-window": "^7.4.0"
   },
   "dependencies": {
