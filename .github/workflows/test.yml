@@ -1,9 +1,7 @@
-name: Test
+name: Test (Pull Requests)
 
 on:
   pull_request:
-    branches: [ main ]
-  push:
     branches: [ main ]
 
 jobs:
