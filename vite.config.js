@@ -6,26 +6,26 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.png', 'apple-touch-icon.png', 'robots.txt'],
+      includeAssets: ['icon-192.png', 'icon-512.png', 'icon.svg', 'robots.txt'],
       manifest: {
         name: 'Scale Climber - Vocal Pitch Training',
         short_name: 'Scale Climber',
         description: 'Train your vocal pitch by climbing the musical mountain! A fun, interactive game that helps you learn to sing in tune.',
-        theme_color: '#20B2AA',
-        background_color: '#87CEEB',
+        theme_color: '#667eea',
+        background_color: '#764ba2',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/scale-climber/',
         start_url: '/scale-climber/',
         icons: [
           {
-            src: '/scale-climber/favicon.png',
+            src: '/scale-climber/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable',
           },
           {
-            src: '/scale-climber/apple-touch-icon.png',
+            src: '/scale-climber/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
@@ -33,7 +33,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,opus}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

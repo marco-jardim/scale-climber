@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="note-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle with gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#bg-gradient)" />
+
+  <!-- Shadow -->
+  <circle cx="256" cy="260" r="230" fill="rgba(0,0,0,0.1)" />
+
+  <!-- Musical staff lines -->
+  <g stroke="#fff" stroke-width="8" stroke-opacity="0.3" fill="none">
+    <line x1="100" y1="200" x2="412" y2="200" />
+    <line x1="100" y1="240" x2="412" y2="240" />
+    <line x1="100" y1="280" x2="412" y2="280" />
+    <line x1="100" y1="320" x2="412" y2="320" />
+    <line x1="100" y1="360" x2="412" y2="360" />
+  </g>
+
+  <!-- Ascending notes (scale climber concept) -->
+  <!-- Note 1 -->
+  <ellipse cx="140" cy="360" rx="18" ry="14" fill="url(#note-gradient)"
+           transform="rotate(-20 140 360)" />
+  <rect x="156" y="300" width="6" height="60" fill="url(#note-gradient)" />
+
+  <!-- Note 2 -->
+  <ellipse cx="190" cy="340" rx="18" ry="14" fill="url(#note-gradient)"
+           transform="rotate(-20 190 340)" />
+  <rect x="206" y="280" width="6" height="60" fill="url(#note-gradient)" />
+
+  <!-- Note 3 -->
+  <ellipse cx="240" cy="320" rx="18" ry="14" fill="url(#note-gradient)"
+           transform="rotate(-20 240 320)" />
+  <rect x="256" y="260" width="6" height="60" fill="url(#note-gradient)" />
+
+  <!-- Note 4 (slightly larger, emphasized) -->
+  <ellipse cx="290" cy="300" rx="20" ry="16" fill="url(#note-gradient)"
+           transform="rotate(-20 290 300)" />
+  <rect x="308" y="235" width="7" height="65" fill="url(#note-gradient)" />
+
+  <!-- Note 5 (largest, target note) -->
+  <ellipse cx="340" cy="270" rx="24" ry="18" fill="url(#note-gradient)"
+           transform="rotate(-20 340 270)" />
+  <rect x="361" y="200" width="8" height="70" fill="url(#note-gradient)" />
+
+  <!-- Sparkles/stars around the top note -->
+  <g fill="#ffd700" opacity="0.8">
+    <path d="M 375 220 l 4 8 l 8 4 l -8 4 l -4 8 l -4 -8 l -8 -4 l 8 -4 z" />
+    <path d="M 390 250 l 3 6 l 6 3 l -6 3 l -3 6 l -3 -6 l -6 -3 l 6 -3 z" />
+    <path d="M 350 245 l 3 6 l 6 3 l -6 3 l -3 6 l -3 -6 l -6 -3 l 6 -3 z" />
+  </g>
+
+  <!-- Mountain/climb motif at bottom -->
+  <path d="M 100 420 L 180 350 L 256 380 L 332 330 L 412 400 L 412 450 L 100 450 Z"
+        fill="rgba(255,255,255,0.15)" />
+
+  <!-- Microphone icon (subtle, bottom center) -->
+  <g fill="#fff" opacity="0.4" transform="translate(236, 130)">
+    <rect x="15" y="0" width="10" height="30" rx="5" />
+    <path d="M 10 25 Q 10 35, 20 35 Q 30 35, 30 25" fill="none" stroke="#fff" stroke-width="2" />
+    <line x1="20" y1="35" x2="20" y2="42" stroke="#fff" stroke-width="2" />
+    <rect x="14" y="42" width="12" height="3" rx="1" />
+  </g>
+
+  <!-- Title arc -->
+  <path id="title-arc" d="M 100 130 A 200 200 0 0 1 412 130" fill="none" />
+  <text fill="#fff" font-family="Arial, sans-serif" font-size="32" font-weight="bold" letter-spacing="2">
+    <textPath href="#title-arc" startOffset="50%" text-anchor="middle">
+      SCALE CLIMBER
+    </textPath>
+  </text>
+</svg>
