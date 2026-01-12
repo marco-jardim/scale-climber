@@ -15,10 +15,10 @@ const KEY_BINDINGS = {
   M: 'mute',
   h: 'toggleHUD',
   H: 'toggleHUD',
-  '1': 'octave1',
-  '2': 'octave2',
-  '3': 'octave3',
-  '4': 'octave4',
+  1: 'octave1',
+  2: 'octave2',
+  3: 'octave3',
+  4: 'octave4',
   p: 'practice',
   P: 'practice',
   '?': 'help',
@@ -57,7 +57,7 @@ class KeyboardControls {
     this.handleAction(action, e);
   }
 
-  handleAction(action, event) {
+  handleAction(action) {
     const state = this.gameEngine?.state || 'idle';
 
     switch (action) {
@@ -85,10 +85,11 @@ class KeyboardControls {
         }
         break;
 
-      case 'mute':
+      case 'mute': {
         const muted = this.gameEngine.toggleMute();
         this.announceToScreenReader(muted ? 'Audio muted' : 'Audio unmuted');
         break;
+      }
 
       case 'toggleHUD':
         this.hudVisible = !this.hudVisible;
@@ -96,7 +97,7 @@ class KeyboardControls {
           this.callbacks.onHUDToggle(this.hudVisible);
         }
         this.announceToScreenReader(
-          this.hudVisible ? 'HUD shown' : 'HUD hidden'
+          this.hudVisible ? 'HUD shown' : 'HUD hidden',
         );
         break;
 
@@ -107,7 +108,7 @@ class KeyboardControls {
         }
         break;
 
-      case 'practice':
+      case 'practice': {
         if (state === 'idle' || state === 'menu') {
           // Trigger practice mode
           const practiceButton = document.getElementById('practice-button');
@@ -116,15 +117,17 @@ class KeyboardControls {
           }
         }
         break;
+      }
 
       case 'octave1':
       case 'octave2':
       case 'octave3':
-      case 'octave4':
+      case 'octave4': {
         // Handle octave selection (if on octave select screen)
         const octaveNum = action.slice(-1);
         this.handleOctaveSelect(octaveNum);
         break;
+      }
 
       default:
         break;
@@ -133,6 +136,7 @@ class KeyboardControls {
 
   handleOctaveSelect(octaveNum) {
     // This would be implemented when octave selection UI is added
+    // eslint-disable-next-line no-console
     console.log(`Octave ${octaveNum} selected`);
   }
 
@@ -141,9 +145,8 @@ class KeyboardControls {
    * @param {string} message - Message to announce
    */
   announceToScreenReader(message) {
-    const announcer =
-      document.getElementById('status-announce') ||
-      this.createAnnouncer();
+    const announcer = document.getElementById('status-announce')
+      || this.createAnnouncer();
 
     // Clear and set new message
     announcer.textContent = '';

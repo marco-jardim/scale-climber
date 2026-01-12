@@ -17,8 +17,7 @@ class ReferenceToneGenerator {
    */
   initialize() {
     if (!this.audioContext) {
-      const AudioContext =
-        window.AudioContext || window.webkitAudioContext;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) {
         this.audioContext = new AudioContext();
       } else {
@@ -51,7 +50,7 @@ class ReferenceToneGenerator {
 
       oscillator.frequency.setValueAtTime(
         frequency,
-        this.audioContext.currentTime
+        this.audioContext.currentTime,
       );
       oscillator.type = this.oscillatorType;
 
@@ -63,7 +62,7 @@ class ReferenceToneGenerator {
       gainNode.gain.linearRampToValueAtTime(this.volume, now + 0.05); // Attack
       gainNode.gain.setValueAtTime(
         this.volume,
-        now + durationSeconds - 0.1
+        now + durationSeconds - 0.1,
       ); // Sustain
       gainNode.gain.linearRampToValueAtTime(0, now + durationSeconds); // Release
 
@@ -145,10 +144,10 @@ class ReferenceToneGenerator {
     if (accidental === 'b') semitones -= 1;
 
     // Add octave offset (A4 is octave 4)
-    semitones += (parseInt(octave) - 4) * 12;
+    semitones += (parseInt(octave, 10) - 4) * 12;
 
     // Calculate frequency: f = A4 * 2^(semitones/12)
-    return A4 * Math.pow(2, semitones / 12);
+    return A4 * 2 ** (semitones / 12);
   }
 
   /**

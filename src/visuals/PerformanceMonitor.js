@@ -62,19 +62,18 @@ class PerformanceMonitor {
    * Automatically adjust quality based on average frame time
    */
   adjustQuality() {
-    const avgFrameTime =
-      this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
+    const avgFrameTime = this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
 
     const previousQuality = this.qualityLevel;
 
     // Degrade quality if needed
     if (
-      avgFrameTime > this.thresholds.medium &&
-      this.qualityLevel === 'high'
+      avgFrameTime > this.thresholds.medium
+      && this.qualityLevel === 'high'
     ) {
       this.qualityLevel = 'medium';
       console.warn(
-        `Reducing quality to medium (avg frame time: ${avgFrameTime.toFixed(2)}ms)`
+        `Reducing quality to medium (avg frame time: ${avgFrameTime.toFixed(2)}ms)`,
       );
       this.emit('qualityChanged', {
         from: previousQuality,
@@ -82,28 +81,27 @@ class PerformanceMonitor {
         avgFrameTime,
       });
     } else if (
-      avgFrameTime > this.thresholds.low &&
-      this.qualityLevel === 'medium'
+      avgFrameTime > this.thresholds.low
+      && this.qualityLevel === 'medium'
     ) {
       this.qualityLevel = 'low';
       console.warn(
-        `Reducing quality to low (avg frame time: ${avgFrameTime.toFixed(2)}ms)`
+        `Reducing quality to low (avg frame time: ${avgFrameTime.toFixed(2)}ms)`,
       );
       this.emit('qualityChanged', {
         from: previousQuality,
         to: 'low',
         avgFrameTime,
       });
-    }
-    // Improve quality if stable
-    else if (
-      avgFrameTime < this.thresholds.high * 0.9 &&
-      this.qualityLevel === 'medium'
+    } else if (
+      avgFrameTime < this.thresholds.high * 0.9
+      && this.qualityLevel === 'medium'
     ) {
       // Only upgrade after sustained good performance (90% of target)
       this.qualityLevel = 'high';
+      // eslint-disable-next-line no-console
       console.log(
-        `Improving quality to high (avg frame time: ${avgFrameTime.toFixed(2)}ms)`
+        `Improving quality to high (avg frame time: ${avgFrameTime.toFixed(2)}ms)`,
       );
       this.emit('qualityChanged', {
         from: previousQuality,
@@ -111,12 +109,13 @@ class PerformanceMonitor {
         avgFrameTime,
       });
     } else if (
-      avgFrameTime < this.thresholds.medium * 0.9 &&
-      this.qualityLevel === 'low'
+      avgFrameTime < this.thresholds.medium * 0.9
+      && this.qualityLevel === 'low'
     ) {
       this.qualityLevel = 'medium';
+      // eslint-disable-next-line no-console
       console.log(
-        `Improving quality to medium (avg frame time: ${avgFrameTime.toFixed(2)}ms)`
+        `Improving quality to medium (avg frame time: ${avgFrameTime.toFixed(2)}ms)`,
       );
       this.emit('qualityChanged', {
         from: previousQuality,
@@ -201,8 +200,7 @@ class PerformanceMonitor {
       };
     }
 
-    const avgFrameTime =
-      this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
+    const avgFrameTime = this.frameTimes.reduce((a, b) => a + b, 0) / this.frameTimes.length;
     const minFrameTime = Math.min(...this.frameTimes);
     const maxFrameTime = Math.max(...this.frameTimes);
     const fps = 1000 / avgFrameTime;

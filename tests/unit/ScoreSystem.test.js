@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  describe, it, expect, beforeEach,
+} from 'vitest';
 import ScoreSystem from '../../src/game/ScoreSystem.js';
 
 describe('ScoreSystem', () => {

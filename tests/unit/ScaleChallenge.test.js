@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import {
+  describe, it, expect, beforeEach, vi,
+} from 'vitest';
 import ScaleChallenge from '../../src/game/ScaleChallenge.js';
 
 describe('ScaleChallenge', () => {
@@ -75,7 +77,7 @@ describe('ScaleChallenge', () => {
           totalNotes: 8,
           currentNote: 'C4',
           progress: 0,
-        })
+        }),
       );
     });
   });
@@ -165,7 +167,7 @@ describe('ScaleChallenge', () => {
           timeToHit: expect.any(Number),
           holdDuration: expect.any(Number),
           attempts: 1,
-        })
+        }),
       );
     });
 
@@ -191,12 +193,11 @@ describe('ScaleChallenge', () => {
           currentNoteIndex: 1,
           currentNote: 'D4',
           progress: 1 / 8,
-        })
+        }),
       );
     });
 
     it('should complete challenge after all 8 notes', () => {
-      const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
       const frequencies = [
         261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25,
       ];
@@ -227,7 +228,7 @@ describe('ScaleChallenge', () => {
       expect(result.stateChanged).toBe(true);
       expect(result.newState).toBe('failed');
       expect(mockCallbacks.onFail).toHaveBeenCalledWith(
-        'TIME_LIMIT_EXCEEDED'
+        'TIME_LIMIT_EXCEEDED',
       );
     });
   });
@@ -252,7 +253,7 @@ describe('ScaleChallenge', () => {
           noteIndex: 0,
           note: 'C4',
           attempts: 3,
-        })
+        }),
       );
     });
 

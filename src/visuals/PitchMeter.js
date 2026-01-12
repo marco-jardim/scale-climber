@@ -107,7 +107,7 @@ class PitchMeter {
       centerX - perfectZoneWidth,
       meterY,
       perfectZoneWidth * 2,
-      meterHeight
+      meterHeight,
     );
 
     // Great zone (±25 cents) - Green
@@ -117,7 +117,7 @@ class PitchMeter {
       centerX - greatZoneWidth,
       meterY,
       greatZoneWidth * 2,
-      meterHeight
+      meterHeight,
     );
 
     // Current pitch indicator
@@ -147,7 +147,7 @@ class PitchMeter {
       ctx.fillText(
         `${this.centDeviation > 0 ? '+' : ''}${Math.round(this.centDeviation)}¢`,
         indicatorX,
-        meterY - 5
+        meterY - 5,
       );
     }
 

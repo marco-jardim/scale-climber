@@ -234,7 +234,7 @@ class GameEngine {
     const score = this.scoreSystem.addNote(
       noteData.averageCents,
       noteData.timeToHit,
-      true
+      true,
     );
 
     this.currentNote++;

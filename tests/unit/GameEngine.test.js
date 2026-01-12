@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import {
+  describe, it, expect, beforeEach, afterEach, vi,
+} from 'vitest';
 import GameEngine from '../../src/game/GameEngine.js';
 
 // Mock audio components
@@ -429,14 +431,14 @@ describe('GameEngine', () => {
           finalScore: 750,
           grade: expect.any(String),
           statistics: expect.any(Object),
-        })
+        }),
       );
     });
 
     it('should save high score on completion', () => {
       const saveHighScoreSpy = vi.spyOn(
         gameEngine.stateRecovery,
-        'saveHighScore'
+        'saveHighScore',
       );
 
       gameEngine.scoreSystem.totalScore = 750;

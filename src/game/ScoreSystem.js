@@ -11,7 +11,7 @@ const GRADE_THRESHOLDS = {
   B: 500, // Good
   C: 400, // Average
   D: 300, // Below average
-  F: 0,   // Fail
+  F: 0, // Fail
 };
 
 // Scoring per note based on cent accuracy

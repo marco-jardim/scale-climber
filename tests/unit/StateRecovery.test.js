@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import {
+  describe, it, expect, beforeEach, afterEach,
+} from 'vitest';
 import StateRecovery from '../../src/game/StateRecovery.js';
 
 describe('StateRecovery', () => {
@@ -89,7 +91,7 @@ describe('StateRecovery', () => {
 
       sessionStorage.setItem(
         'scale-climber-session',
-        JSON.stringify(oldSession)
+        JSON.stringify(oldSession),
       );
 
       const loaded = stateRecovery.loadSession();
@@ -106,7 +108,7 @@ describe('StateRecovery', () => {
 
       sessionStorage.setItem(
         'scale-climber-session',
-        JSON.stringify(invalidSession)
+        JSON.stringify(invalidSession),
       );
 
       const loaded = stateRecovery.loadSession();
@@ -266,7 +268,7 @@ describe('StateRecovery', () => {
       expect(stateRecovery.hasSession()).toBe(false);
       expect(stateRecovery.getHighScores()).toHaveLength(0);
       expect(stateRecovery.loadSettings()).toEqual(
-        stateRecovery.getDefaultSettings()
+        stateRecovery.getDefaultSettings(),
       );
     });
   });

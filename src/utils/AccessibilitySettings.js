@@ -7,7 +7,7 @@
 class AccessibilitySettings {
   constructor() {
     this.prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
+      '(prefers-reduced-motion: reduce)',
     ).matches;
     this.highContrastMode = false;
     this.colorblindMode = 'none'; // none | deuteranopia | protanopia | tritanopia
@@ -22,7 +22,7 @@ class AccessibilitySettings {
    */
   setupMediaQueryListeners() {
     const reducedMotionQuery = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
+      '(prefers-reduced-motion: reduce)',
     );
 
     // Modern syntax with addEventListener
@@ -46,7 +46,7 @@ class AccessibilitySettings {
   loadSettings() {
     try {
       const saved = JSON.parse(
-        localStorage.getItem('accessibility_settings')
+        localStorage.getItem('accessibility_settings'),
       );
       if (saved) {
         this.highContrastMode = saved.highContrast || false;
@@ -71,7 +71,7 @@ class AccessibilitySettings {
           highContrast: this.highContrastMode,
           colorblindMode: this.colorblindMode,
           focusVisible: this.focusVisible,
-        })
+        }),
       );
     } catch (err) {
       console.warn('Failed to save accessibility settings:', err);
@@ -87,7 +87,7 @@ class AccessibilitySettings {
     // Reduced motion
     document.body.classList.toggle(
       'reduced-motion',
-      this.prefersReducedMotion
+      this.prefersReducedMotion,
     );
 
     // High contrast

@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import {
+  describe, it, expect, beforeEach, vi,
+} from 'vitest';
 import PracticeMode from '../../src/game/PracticeMode.js';
 
 describe('PracticeMode', () => {
@@ -81,7 +83,7 @@ describe('PracticeMode', () => {
           requiredDuration: 1500,
           progress: expect.any(Number),
           currentCents: expect.any(Number),
-        })
+        }),
       );
     });
 
@@ -105,7 +107,7 @@ describe('PracticeMode', () => {
           isHolding: false,
           holdDuration: 0,
           progress: 0,
-        })
+        }),
       );
     });
 
@@ -142,7 +144,7 @@ describe('PracticeMode', () => {
           averageCents: expect.any(Number),
           holdDuration: expect.any(Number),
           attempt: 1,
-        })
+        }),
       );
     });
 

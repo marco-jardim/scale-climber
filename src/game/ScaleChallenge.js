@@ -79,7 +79,7 @@ class ScaleChallenge {
       const match = checkNoteMatch(
         pitchResult.frequency,
         targetNote,
-        this.difficultySettings.tolerance
+        this.difficultySettings.tolerance,
       );
 
       if (match.match) {

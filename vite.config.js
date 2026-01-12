@@ -82,12 +82,12 @@ export default defineConfig({
             './src/game/PracticeMode.js',
             './src/game/ScoreSystem.js',
           ],
-          'audio': [
+          audio: [
             './src/audio/AudioContextManager.js',
             './src/audio/PitchDetector.js',
             './src/audio/CalibrationEngine.js',
           ],
-          'visuals': [
+          visuals: [
             './src/visuals/CanvasRenderer.js',
             './src/visuals/CharacterSprite.js',
             './src/visuals/PitchMeter.js',

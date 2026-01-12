@@ -16,10 +16,7 @@ import ReferenceToneGenerator from './utils/ReferenceToneGenerator.js';
 // Global state
 let gameEngine = null;
 let renderer = null;
-let keyboardControls = null;
-let accessibilitySettings = null;
 let audioFeedback = null;
-let referenceTone = null;
 
 // Screen management
 const screens = {
@@ -238,11 +235,13 @@ document.getElementById('start-button')?.addEventListener('click', () => {
 
 document.getElementById('practice-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
+  // eslint-disable-next-line no-console
   console.log('Practice mode not yet implemented');
 });
 
 document.getElementById('settings-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
+  // eslint-disable-next-line no-console
   console.log('Settings not yet implemented');
 });
 
@@ -281,6 +280,7 @@ document.getElementById('close-help')?.addEventListener('click', () => {
 // Initialize app
 async function initializeApp() {
   try {
+    // eslint-disable-next-line no-console
     console.log('Initializing Scale Climber...');
 
     // Check for Web Audio API support
@@ -295,16 +295,21 @@ async function initializeApp() {
     }
 
     // Initialize accessibility settings
-    accessibilitySettings = new AccessibilitySettings();
+    // eslint-disable-next-line no-new
+    new AccessibilitySettings();
+    // eslint-disable-next-line no-console
     console.log('Accessibility settings initialized');
 
     // Initialize audio feedback
     audioFeedback = new AudioFeedback();
     await audioFeedback.waitForLoad();
+    // eslint-disable-next-line no-console
     console.log('Audio feedback initialized');
 
     // Initialize reference tone generator
-    referenceTone = new ReferenceToneGenerator();
+    // eslint-disable-next-line no-new
+    new ReferenceToneGenerator();
+    // eslint-disable-next-line no-console
     console.log('Reference tone generator initialized');
 
     // Initialize game engine
@@ -338,12 +343,15 @@ async function initializeApp() {
     renderer.setComponents({ character, pitchMeter, particleSystem });
 
     // Initialize keyboard controls
-    keyboardControls = new KeyboardControls(gameEngine, {
+    // eslint-disable-next-line no-new
+    new KeyboardControls(gameEngine, {
       onHelp: toggleHelp,
       onHUDToggle: toggleHUD,
     });
+    // eslint-disable-next-line no-console
     console.log('Keyboard controls initialized');
 
+    // eslint-disable-next-line no-console
     console.log('Scale Climber initialized successfully');
 
     // Show start screen
@@ -365,6 +373,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/scale-climber/sw.js')
       .then((registration) => {
+        // eslint-disable-next-line no-console
         console.log('Service Worker registered:', registration.scope);
 
         // Check for updates every hour
@@ -378,8 +387,8 @@ if ('serviceWorker' in navigator) {
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (
-                newWorker.state === 'installed' &&
-                navigator.serviceWorker.controller
+                newWorker.state === 'installed'
+                && navigator.serviceWorker.controller
               ) {
                 // New version available
                 showUpdateNotification();

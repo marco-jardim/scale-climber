@@ -84,6 +84,7 @@ class CanvasRenderer {
    */
   setupPerformanceMonitoring() {
     this.performanceMonitor.on('qualityChanged', (data) => {
+      // eslint-disable-next-line no-console
       console.log(`Quality changed: ${data.from} → ${data.to}`);
 
       // Apply quality settings to components
@@ -254,7 +255,7 @@ class CanvasRenderer {
       this.ctx.fillText(
         `Combo: ${this.gameState.combo}x`,
         padding,
-        padding + fontSize * 2 + 10
+        padding + fontSize * 2 + 10,
       );
     }
 
@@ -266,7 +267,7 @@ class CanvasRenderer {
     this.ctx.fillText(
       `${stats.fps} FPS (${stats.qualityLevel})`,
       this.width - padding,
-      padding + 14
+      padding + 14,
     );
   }
 

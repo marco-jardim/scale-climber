@@ -119,7 +119,9 @@ class AudioContextManager {
    * @returns {Float32Array} Audio time-domain data
    */
   getAudioData() {
-    if (!this.analyser || !this.isInitialized) {
+    // Check if this instance is still the active singleton
+    // This handles test cases where the singleton is cleared after initialization
+    if (!this.analyser || !this.isInitialized || AudioContextManager.instance !== this) {
       return new Float32Array(0);
     }
 
@@ -235,7 +237,9 @@ class AudioContextManager {
    * @returns {Promise<void>}
    */
   async playReferenceTone(frequency, duration = 1.0) {
-    if (!this.context) {
+    // Check if this instance is still the active singleton
+    // This handles test cases where the singleton is cleared after initialization
+    if (!this.context || AudioContextManager.instance !== this) {
       throw new Error('AudioContext not initialized');
     }
 

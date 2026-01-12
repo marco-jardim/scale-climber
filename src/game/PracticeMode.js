@@ -52,7 +52,7 @@ class PracticeMode {
       const match = checkNoteMatch(
         pitchResult.frequency,
         this.config.targetNote,
-        this.config.tolerance
+        this.config.tolerance,
       );
 
       if (match.match) {

@@ -71,6 +71,7 @@ class AudioFeedback {
         });
 
         audio.addEventListener('error', () => {
+          // eslint-disable-next-line no-console
           console.warn(`Failed to load sound: ${key}, using silent fallback`);
           this.sounds.set(key, fallback);
           resolve();
@@ -79,8 +80,10 @@ class AudioFeedback {
         audio.src = path;
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.warn(`Failed to load sound: ${key}`, err);
       this.sounds.set(key, fallback);
+      return Promise.resolve();
     }
   }
 
@@ -91,8 +94,7 @@ class AudioFeedback {
   createSilentAudio() {
     const audio = new Audio();
     // Data URL for silent audio (1 second of silence, WAV format)
-    audio.src =
-      'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+    audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
     audio.volume = 0;
     return audio;
   }
@@ -118,9 +120,11 @@ class AudioFeedback {
 
       instance.play().catch((err) => {
         // Silently fail if autoplay blocked or audio errors
+        // eslint-disable-next-line no-console
         console.debug('Failed to play sound:', err);
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.debug('Error playing sound:', err);
     }
   }

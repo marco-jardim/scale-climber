@@ -4,6 +4,7 @@
  * Adaptive particle count based on performance
  */
 
+/* eslint-disable max-classes-per-file */
 class Particle {
   constructor(x, y, color) {
     this.x = x;
