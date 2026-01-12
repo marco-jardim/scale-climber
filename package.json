@@ -34,10 +34,11 @@
     "jsdom": "^27.4.0",
     "prettier": "^3.1.1",
     "vite": "^5.0.10",
-    "vitest": "^1.1.0"
+    "vite-plugin-pwa": "^1.2.0",
+    "vitest": "^1.1.0",
+    "workbox-window": "^7.4.0"
   },
   "dependencies": {
-    "workbox-build": "^7.0.0",
-    "workbox-window": "^7.0.0"
+    "workbox-build": "^7.0.0"
   }
 }

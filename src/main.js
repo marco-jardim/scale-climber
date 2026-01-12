@@ -358,3 +358,79 @@ async function initializeApp() {
 
 // Start the app
 initializeApp();
+
+// Register service worker for PWA/offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/scale-climber/sw.js')
+      .then((registration) => {
+        console.log('Service Worker registered:', registration.scope);
+
+        // Check for updates every hour
+        setInterval(() => {
+          registration.update();
+        }, 60 * 60 * 1000);
+
+        // Listen for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (
+                newWorker.state === 'installed' &&
+                navigator.serviceWorker.controller
+              ) {
+                // New version available
+                showUpdateNotification();
+              }
+            });
+          }
+        });
+      })
+      .catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+
+    // Handle controller change
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  });
+}
+
+/**
+ * Show update notification banner
+ */
+function showUpdateNotification() {
+  // Create update banner
+  const updateBanner = document.createElement('div');
+  updateBanner.id = 'update-banner';
+  updateBanner.className = 'update-banner';
+  updateBanner.setAttribute('role', 'alert');
+  updateBanner.setAttribute('aria-live', 'assertive');
+  updateBanner.innerHTML = `
+    <div class="update-banner-content">
+      <p>🎵 A new version is available!</p>
+      <button id="update-btn" class="primary-button">Update Now</button>
+      <button id="dismiss-update" class="text-button">Later</button>
+    </div>
+  `;
+
+  document.body.appendChild(updateBanner);
+
+  // Update button handler
+  document.getElementById('update-btn')?.addEventListener('click', () => {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+  });
+
+  // Dismiss button handler
+  document.getElementById('dismiss-update')?.addEventListener('click', () => {
+    updateBanner.remove();
+  });
+}
