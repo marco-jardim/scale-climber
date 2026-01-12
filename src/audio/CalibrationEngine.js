@@ -113,8 +113,8 @@ class CalibrationEngine {
     while (Date.now() - startTime < duration) {
       const detection = await this.pitchDetector.detect();
 
-      // Only record confident pitch detections
-      if (detection.frequency && detection.confidence > 0.7 && detection.volume > 0.1) {
+      // Only record confident pitch detections (relaxed thresholds)
+      if (detection.frequency && detection.confidence > 0.5 && detection.volume > 0.05) {
         this.pitchSamples.push({
           frequency: detection.frequency,
           note: detection.note,
@@ -125,9 +125,11 @@ class CalibrationEngine {
 
       const progress = 0.3 + ((Date.now() - startTime) / duration) * 0.6;
       const remaining = Math.ceil((duration - (Date.now() - startTime)) / 1000);
+      const samplesCollected = this.pitchSamples.length;
+
       this.reportProgress(
         progress,
-        `Sing from low to high... (${remaining}s remaining)`,
+        `Sing from low to high... ${samplesCollected} notes detected (${remaining}s)`,
       );
 
       await this.sleep(sampleInterval);

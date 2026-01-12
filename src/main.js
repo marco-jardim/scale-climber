@@ -22,6 +22,7 @@ let audioFeedback = null;
 const screens = {
   loading: document.getElementById('loading-screen'),
   start: document.getElementById('start-screen'),
+  'calibration-ready': document.getElementById('calibration-ready-screen'),
   calibration: document.getElementById('calibration-screen'),
   game: document.getElementById('game-screen'),
   results: document.getElementById('results-screen'),
@@ -64,7 +65,7 @@ function showCalibrationReady() {
 }
 
 /**
- * Start calibration process
+ * Start calibration process with countdown
  */
 async function startCalibration() {
   try {
@@ -75,10 +76,26 @@ async function startCalibration() {
       await gameEngine.audioManager.resume();
     }
 
-    // Run calibration
+    const instruction = document.getElementById('calibration-instruction');
+
+    // Countdown: 3, 2, 1, Start!
+    instruction.textContent = 'Get ready... 3';
+    await sleep(1000);
+    instruction.textContent = 'Get ready... 2';
+    await sleep(1000);
+    instruction.textContent = 'Get ready... 1';
+    await sleep(1000);
+    instruction.textContent = 'START SINGING! 🎤';
+    await sleep(500);
+
+    // Run calibration with real-time feedback
     const calibrationResult = await gameEngine.startCalibration((state, progress, message) => {
-      const instruction = document.getElementById('calibration-instruction');
-      instruction.textContent = message || `Calibrating... ${Math.round(progress * 100)}%`;
+      // Get current pitch detection
+      const lastResult = gameEngine.pitchDetector.getLastResult();
+      const noteInfo = lastResult?.note ? `♪ ${lastResult.note}` : '♪ ...';
+      const volumePercent = lastResult?.volume ? Math.round(lastResult.volume * 100) : 0;
+
+      instruction.textContent = `${message} | ${noteInfo} | Vol: ${volumePercent}%`;
     });
 
     if (!calibrationResult.success) {
@@ -95,6 +112,13 @@ async function startCalibration() {
     console.error('Failed to start challenge:', error);
     showError(`Failed to start: ${error.message}`);
   }
+}
+
+/**
+ * Sleep utility
+ */
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
