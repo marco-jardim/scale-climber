@@ -1,0 +1,33 @@
+{
+  "name": "Scale Climber - Vocal Pitch Training Game",
+  "short_name": "Scale Climber",
+  "description": "A browser-based game to help you train vocal pitch by singing a C major scale",
+  "start_url": "/scale-climber/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#4a90e2",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/scale-climber/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/scale-climber/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["music", "education", "games"],
+  "screenshots": [
+    {
+      "src": "/scale-climber/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Gameplay screenshot"
+    }
+  ]
+}

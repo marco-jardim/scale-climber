@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scale Climber - A vocal pitch training game to help you learn to sing in tune">
+  <meta name="theme-color" content="#4a90e2">
+
+  <title>Scale Climber - Vocal Pitch Training Game</title>
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/scale-climber/manifest.json">
+
+  <script type="module" crossorigin src="/scale-climber/assets/index-ZIWQZa1N.js"></script>
+  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-BSbqNxl5.css">
+</head>
+<body>
+  <div id="app">
+    <div id="loading-screen" class="screen active">
+      <h1>🎵 Scale Climber</h1>
+      <p>Loading...</p>
+    </div>
+
+    <div id="start-screen" class="screen">
+      <h1>🎵 Scale Climber</h1>
+      <p class="tagline">Climb the musical mountain, one note at a time!</p>
+      <button id="start-button" class="primary-button">Start Game</button>
+      <button id="practice-button" class="secondary-button">Practice Mode</button>
+      <button id="settings-button" class="text-button">Settings</button>
+    </div>
+
+    <div id="calibration-screen" class="screen">
+      <h2>Voice Calibration</h2>
+      <div id="calibration-content">
+        <p id="calibration-instruction">Preparing...</p>
+        <div id="calibration-progress"></div>
+      </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+      <canvas id="game-canvas"></canvas>
+      <div id="hud">
+        <div id="score">Score: <span id="score-value">0</span></div>
+        <div id="current-note">Target: <span id="note-value">-</span></div>
+        <div id="combo">Combo: <span id="combo-value">0</span></div>
+      </div>
+      <button id="pause-button" class="icon-button" aria-label="Pause">⏸</button>
+    </div>
+
+    <div id="results-screen" class="screen">
+      <h2>Results</h2>
+      <div id="results-content">
+        <div class="grade" id="final-grade">-</div>
+        <div class="score-display">
+          <span class="label">Score:</span>
+          <span id="final-score" class="value">0</span>
+        </div>
+        <div class="stats" id="stats-display"></div>
+      </div>
+      <button id="play-again-button" class="primary-button">Play Again</button>
+      <button id="menu-button" class="secondary-button">Main Menu</button>
+    </div>
+
+    <div id="error-screen" class="screen">
+      <h2>⚠️ Error</h2>
+      <p id="error-message">Something went wrong</p>
+      <button id="retry-button" class="primary-button">Retry</button>
+      <button id="error-menu-button" class="secondary-button">Main Menu</button>
+    </div>
+  </div>
+
+</body>
+</html>

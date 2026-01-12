@@ -1,0 +1,42 @@
+{
+  "name": "scale-climber",
+  "version": "1.0.0",
+  "description": "A browser-based vocal pitch training game - climb the musical mountain by singing the correct notes!",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:e2e": "playwright test",
+    "lint": "eslint . --ext .js --fix",
+    "format": "prettier --write \"**/*.{js,json,md,css,html}\""
+  },
+  "keywords": [
+    "music",
+    "vocal-training",
+    "pitch-detection",
+    "game",
+    "web-audio",
+    "pwa"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@vitest/ui": "^1.1.0",
+    "@vitest/coverage-v8": "^1.1.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.1.1",
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "workbox-build": "^7.0.0",
+    "workbox-window": "^7.0.0"
+  }
+}
