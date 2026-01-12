@@ -41,6 +41,7 @@ function showScreen(screenName) {
 
   // Start/stop renderer based on screen
   if (screenName === 'game' && renderer) {
+    renderer.resize();
     renderer.start();
   } else if (renderer) {
     renderer.stop();
@@ -293,7 +294,7 @@ document.getElementById('settings-button')?.addEventListener('click', () => {
 
 document.getElementById('play-again-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  startChallenge();
+  showCalibrationReady();
 });
 
 document.getElementById('menu-button')?.addEventListener('click', () => {

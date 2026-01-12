@@ -4,6 +4,9 @@
  * This is more reliable than browser-based conversion
  */
 
+/* eslint-disable no-console */
+/* eslint-disable import/no-unresolved */
+
 import { createCanvas, loadImage } from 'canvas';
 import fs from 'fs';
 import path from 'path';
@@ -71,7 +74,7 @@ async function main() {
   console.log(`Files saved to: ${outputDir}`);
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error('Fatal error:', error);
   process.exit(1);
 });
