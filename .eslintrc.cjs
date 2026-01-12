@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'import/prefer-default-export': 'off',
+    'import/extensions': ['error', 'never', { js: 'always' }],
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: [
         '**/*.config.js',
@@ -25,6 +26,10 @@ module.exports = {
     }],
     'class-methods-use-this': 'off',
     'no-underscore-dangle': 'off',
+    'no-await-in-loop': 'off',
+    'no-constructor-return': 'off',
+    'no-use-before-define': ['error', { functions: false }],
+    'no-promise-executor-return': 'off',
     'max-len': ['error', { code: 100, ignoreComments: true, ignoreStrings: true }],
     'no-plusplus': 'off',
     'no-continue': 'off',
