@@ -6,17 +6,34 @@
 }
 
 :root {
-  /* Color palette */
-  --color-primary: #4a90e2;
-  --color-secondary: #7b68ee;
-  --color-accent: #ff6b6b;
-  --color-success: #51cf66;
-  --color-warning: #ffd43b;
-  --color-error: #ff6b6b;
-  --color-bg: #1a1a2e;
-  --color-bg-light: #2a2a3e;
-  --color-text: #ffffff;
-  --color-text-secondary: #a0a0b0;
+  /* Phase 3 Design System - Score Tier Colors */
+  --color-perfect: #FFD700;
+  --color-great: #32CD32;
+  --color-good: #00BFFF;
+  --color-ok: #FFA500;
+  --color-miss: #FF4444;
+
+  /* Background & Environment */
+  --color-bg-sky-start: #87CEEB;
+  --color-bg-sky-end: #E0F6FF;
+  --color-mountain: #8B7BB8;
+  --color-character-primary: #20B2AA;
+
+  /* Text Colors */
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #7F8C8D;
+  --color-text-light: #ffffff;
+
+  /* Legacy colors for backwards compatibility */
+  --color-primary: #20B2AA;
+  --color-secondary: #8B7BB8;
+  --color-accent: #FFD700;
+  --color-success: #32CD32;
+  --color-warning: #FFA500;
+  --color-error: #FF4444;
+  --color-bg: #87CEEB;
+  --color-bg-light: #E0F6FF;
+  --color-text: #2C3E50;
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -25,19 +42,36 @@
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
 
-  /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 3rem;
+  /* Typography - Phase 3 Design System */
+  --font-primary: 'Fredoka One', 'Comic Sans MS', cursive, sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Courier New', monospace;
+
+  /* Font sizes (rem) */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.5rem;    /* 24px */
+  --text-2xl: 2rem;     /* 32px */
+  --text-3xl: 3rem;     /* 48px */
+
+  /* Legacy font sizes */
+  --font-family: var(--font-secondary);
+  --font-size-sm: var(--text-sm);
+  --font-size-base: var(--text-base);
+  --font-size-lg: var(--text-lg);
+  --font-size-xl: var(--text-xl);
+  --font-size-2xl: var(--text-2xl);
+  --font-size-3xl: var(--text-3xl);
 
   /* Borders */
   --border-radius: 8px;
   --border-radius-lg: 12px;
+
+  /* Canvas dimensions */
+  --canvas-max-width: 1200px;
+  --canvas-aspect-ratio: 16 / 9;
 }
 
 body {
