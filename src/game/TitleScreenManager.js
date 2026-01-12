@@ -129,41 +129,62 @@ class TitleScreenManager {
 
     switch (s) {
       case STATE.NEED_MIC:
-        txt(ui.headline, 'Your voice is the controller.');
-        txt(ui.subhead, 'Enable your microphone to start climbing.');
+        txt(ui.headline, 'MIC ON = GAME ON.');
+        txt(ui.subhead, 'Enable your mic to start the climb.');
         txt(ui.ctaBtn, 'Enable mic');
+        txt(ui.ctaHelper, 'No mic, no magic.');
         ui.ctaBtn.disabled = false;
         break;
       case STATE.REQUESTING_MIC:
-        txt(ui.headline, 'One quick step.');
-        txt(ui.subhead, 'Choose “Allow” in the browser prompt.');
+        txt(ui.headline, 'POWER UP!');
+        txt(ui.subhead, 'Hit “Allow” in the browser prompt.');
         txt(ui.ctaBtn, 'Waiting...');
+        txt(ui.ctaHelper, 'Look near the address bar if you missed it.');
         ui.ctaBtn.disabled = true;
         break;
       case STATE.LISTENING:
-        txt(ui.headline, 'Hum a comfy note.');
+        txt(ui.headline, 'DROP A NOTE.');
         txt(ui.subhead, 'Hold it steady to clip in.');
         txt(ui.ctaBtn, 'Hum to clip in');
-        ui.ctaBtn.disabled = true; // "Passive" button until success
+        txt(ui.ctaHelper, 'Any comfy note. Just keep it smooth.');
+        txt(ui.voiceHint, 'Try “oo” →');
+        ui.ctaBtn.disabled = true;
         break;
       case STATE.TOO_QUIET:
-        txt(ui.headline, 'A little louder.');
+        txt(ui.headline, 'SPEAK UP, CHAMP.');
+        txt(ui.subhead, 'A bit louder—or move closer to the mic.');
+        txt(ui.voiceHint, 'Closer = better');
+        break;
+      case STATE.PITCH_UNCERTAIN:
+        txt(ui.headline, 'GIVE ME A CLEAN TONE.');
+        txt(ui.subhead, 'One long “oo” works best.');
+        txt(ui.voiceHint, 'Looong “oo”…');
+        break;
+      case STATE.CLIP_IN_ARMED:
+        txt(ui.headline, 'RIGHT ON IT!');
+        txt(ui.subhead, 'Now HOLD. Don’t flinch.');
         break;
       case STATE.CLIP_IN_HOLDING:
-        txt(ui.headline, 'Clipping in...');
-        txt(ui.subhead, 'Stay with that note.');
-        txt(ui.ctaBtn, 'Hold steady...');
+        txt(ui.headline, 'LOCKING IN…');
+        txt(ui.subhead, 'Keep it pinned.');
+        txt(ui.ctaBtn, 'Locking…');
+        txt(ui.ctaHelper, 'You’re cooking.');
+        txt(ui.voiceHint, 'Steady!');
         break;
       case STATE.CLIP_IN_SUCCESS:
-        txt(ui.headline, 'Locked in.');
-        txt(ui.subhead, 'Route revealed.');
-        txt(ui.ctaBtn, 'Start Climb');
+        txt(ui.headline, 'LOCKED!');
+        txt(ui.subhead, 'Route unlocked. Time to climb.');
+        txt(ui.ctaBtn, 'Start climb');
+        txt(ui.ctaHelper, 'Sing the scale to hit the summit.');
+        txt(ui.voiceHint, '');
         ui.ctaBtn.disabled = false;
         ui.ctaBtn.classList.add('pulse-success');
         break;
       case STATE.ERROR_MIC_DENIED:
-        txt(ui.headline, 'Mic blocked.');
-        txt(ui.ctaBtn, 'Try Again');
+        txt(ui.headline, 'NO MIC, NO CLIMB.');
+        txt(ui.subhead, 'Enable mic access to play.');
+        txt(ui.ctaBtn, 'Try again');
+        txt(ui.ctaHelper, 'You can flip it in your browser settings.');
         ui.ctaBtn.disabled = false;
         break;
 

@@ -61,6 +61,13 @@ class TitleSceneRenderer {
       this.width = parent.clientWidth;
       this.height = parent.clientHeight;
 
+      // Full screen responsive
+      this.canvas.style.width = '100%';
+      this.canvas.style.height = '100%';
+      this.canvas.style.position = 'absolute';
+      this.canvas.style.left = '0';
+      this.canvas.style.top = '0';
+
       const scale = window.devicePixelRatio || 1;
       this.canvas.width = this.width * scale;
       this.canvas.height = this.height * scale;
@@ -189,7 +196,7 @@ class TitleSceneRenderer {
     this.renderNodes(state);
     this.renderCampfire();
     this.renderClimber(); // Placeholder or actual sprite
-    this.renderOrb(state);
+    this.renderOrb();
 
     // Render Rope/Clip-in animation if active
     if (state.isClippingIn || state.clipProgress > 0) {
@@ -303,7 +310,7 @@ class TitleSceneRenderer {
     ctx.fillRect(x, y, 20, 40); // Placeholder
   }
 
-  renderOrb(state) {
+  renderOrb() {
     if (this.orbState.alpha <= 0.01) return;
 
     const { ctx } = this;

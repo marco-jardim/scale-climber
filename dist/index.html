@@ -12,11 +12,11 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/scale-climber/manifest.json">
 
-  <script type="module" crossorigin src="/scale-climber/assets/index-tCKUYmvf.js"></script>
+  <script type="module" crossorigin src="/scale-climber/assets/index-JowH2Fap.js"></script>
   <link rel="modulepreload" crossorigin href="/scale-climber/assets/audio-D-pHvAC-.js">
   <link rel="modulepreload" crossorigin href="/scale-climber/assets/game-logic-DIPB9U6A.js">
   <link rel="modulepreload" crossorigin href="/scale-climber/assets/visuals-DAVB2UIO.js">
-  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-A2Lg5A_c.css">
+  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-DMx1TWnX.css">
 <link rel="manifest" href="/scale-climber/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/scale-climber/registerSW.js"></script></head>
 <body>
   <!-- Screen reader announcements -->
@@ -31,17 +31,17 @@
       <canvas id="title-canvas"></canvas>
       <div class="title-ui-overlay">
         <div class="header-row">
-          <span class="brand">Scale Climber</span>
+          <span class="brand">SCALE CLIMBER</span>
           <div class="header-actions">
-            <button class="icon-btn" title="Daily Route">Daily Route</button>
-            <button class="icon-btn" title="Practice">Practice</button>
+            <button class="icon-btn" title="Daily Rush">Daily Rush</button>
+            <button class="icon-btn" title="Free Climb">Free Climb</button>
             <button class="icon-btn" title="Settings">Settings</button>
           </div>
         </div>
 
         <div class="center-panel">
-          <h1 id="ts-headline">Scale Climber</h1>
-          <p id="ts-subhead">Sing the scale. Climb the mountain.</p>
+          <h1 id="ts-headline">SCALE CLIMBER</h1>
+          <p id="ts-subhead">Sing it. Lock it. Climb it.</p>
 
           <div class="cta-container">
             <button id="ts-cta-btn" class="primary-morph-btn">Enable Mic</button>
@@ -61,79 +61,85 @@
     </div>
 
     <div id="start-screen" class="screen" role="main">
-      <h1>🎵 Scale Climber</h1>
-      <p class="tagline">Climb the musical mountain, one note at a time!</p>
-      <nav aria-label="Game menu" class="menu-buttons">
-        <button id="start-button" class="primary-button" aria-label="Start challenge mode">
-          Start Game
-        </button>
-        <button id="practice-button" class="secondary-button" aria-label="Start practice mode (no time limit)">
-          Practice Mode
-        </button>
-        <button id="settings-button" class="text-button" aria-label="Open settings menu">
-          Settings
-        </button>
-      </nav>
-      <div class="keyboard-hint" aria-label="Keyboard shortcuts">
-        Press <kbd>?</kbd> for keyboard shortcuts
+      <div class="content-constrained">
+        <h1>🎵 Scale Climber</h1>
+        <p class="tagline">Climb the musical mountain, one note at a time!</p>
+        <nav aria-label="Game menu" class="menu-buttons">
+          <button id="start-button" class="primary-button" aria-label="Start challenge mode">
+            Start Game
+          </button>
+          <button id="practice-button" class="secondary-button" aria-label="Start practice mode (no time limit)">
+            Practice Mode
+          </button>
+          <button id="settings-button" class="text-button" aria-label="Open settings menu">
+            Settings
+          </button>
+        </nav>
+        <div class="keyboard-hint" aria-label="Keyboard shortcuts">
+          Press <kbd>?</kbd> for keyboard shortcuts
+        </div>
       </div>
     </div>
 
     <div id="calibration-ready-screen" class="screen" role="main">
-      <h2>🎤 Voice Calibration Guide</h2>
-      <div class="calibration-instructions">
-        <p><strong>Calibration detects your comfortable vocal range in two phases:</strong></p>
+      <div class="content-constrained">
+        <h2>🎤 Voice Calibration Guide</h2>
+        <div class="calibration-instructions">
+          <p><strong>Calibration detects your comfortable vocal range in two phases:</strong></p>
 
-        <h3>Phase 1: Microphone Test (3 seconds)</h3>
-        <ul>
-          <li>Speak, hum, or sing any comfortable note</li>
-          <li>We just need to confirm your microphone is working</li>
-          <li>Volume should reach at least 5%</li>
-        </ul>
-
-        <h3>Phase 2: Range Detection (10 seconds)</h3>
-        <ul>
-          <li><strong>Sing continuously</strong> - Don't pause for long</li>
-          <li><strong>Vary your pitch</strong> - Start low, go high, come back down</li>
-          <li><strong>Use vowel sounds</strong> - "Ahh", "Ooh", "Eee" work best</li>
-          <li><strong>Stay comfortable</strong> - Don't strain your voice</li>
-          <li>Goal: Detect at least 10 clear notes</li>
-        </ul>
-
-        <div class="tip-box">
-          <p class="tip">💡 <strong>Best Practices:</strong></p>
+          <h3>Phase 1: Microphone Test (3 seconds)</h3>
           <ul>
-            <li>✓ Use a quiet environment</li>
-            <li>✓ Sing clearly and sustain each note for 1-2 seconds</li>
-            <li>✓ Watch the real-time feedback (note name, volume %)</li>
-            <li>✓ If it says "0 notes detected" - sing louder or more clearly</li>
-            <li>✗ Avoid talking/whispering - use singing voice</li>
-            <li>✗ Avoid short, choppy sounds</li>
+            <li>Speak, hum, or sing any comfortable note</li>
+            <li>We just need to confirm your microphone is working</li>
+            <li>Volume should reach at least 5%</li>
+          </ul>
+
+          <h3>Phase 2: Range Detection (10 seconds)</h3>
+          <ul>
+            <li><strong>Sing continuously</strong> - Don't pause for long</li>
+            <li><strong>Vary your pitch</strong> - Start low, go high, come back down</li>
+            <li><strong>Use vowel sounds</strong> - "Ahh", "Ooh", "Eee" work best</li>
+            <li><strong>Stay comfortable</strong> - Don't strain your voice</li>
+            <li>Goal: Detect at least 10 clear notes</li>
+          </ul>
+
+          <div class="tip-box">
+            <p class="tip">💡 <strong>Best Practices:</strong></p>
+            <ul>
+              <li>✓ Use a quiet environment</li>
+              <li>✓ Sing clearly and sustain each note for 1-2 seconds</li>
+              <li>✓ Watch the real-time feedback (note name, volume %)</li>
+              <li>✓ If it says "0 notes detected" - sing louder or more clearly</li>
+              <li>✗ Avoid talking/whispering - use singing voice</li>
+              <li>✗ Avoid short, choppy sounds</li>
+            </ul>
+          </div>
+
+          <p><strong>During calibration you'll see:</strong></p>
+          <ul>
+            <li><strong>♪ C4, D4, etc.</strong> - The note you're currently singing</li>
+            <li><strong>Vol: X%</strong> - Your microphone volume (aim for 10%+)</li>
+            <li><strong>X notes detected</strong> - Progress toward the 10-note goal</li>
           </ul>
         </div>
-
-        <p><strong>During calibration you'll see:</strong></p>
-        <ul>
-          <li><strong>♪ C4, D4, etc.</strong> - The note you're currently singing</li>
-          <li><strong>Vol: X%</strong> - Your microphone volume (aim for 10%+)</li>
-          <li><strong>X notes detected</strong> - Progress toward the 10-note goal</li>
-        </ul>
+        <nav aria-label="Calibration actions" class="menu-buttons">
+          <button id="begin-calibration-button" class="primary-button" aria-label="Begin voice calibration">
+            I'm Ready - Start Calibration
+          </button>
+          <button id="cancel-calibration-button" class="text-button" aria-label="Cancel and return to menu">
+            Cancel
+          </button>
+        </nav>
       </div>
-      <nav aria-label="Calibration actions" class="menu-buttons">
-        <button id="begin-calibration-button" class="primary-button" aria-label="Begin voice calibration">
-          I'm Ready - Start Calibration
-        </button>
-        <button id="cancel-calibration-button" class="text-button" aria-label="Cancel and return to menu">
-          Cancel
-        </button>
-      </nav>
     </div>
 
     <div id="calibration-screen" class="screen" role="status" aria-live="polite">
-      <h2>Voice Calibration</h2>
-      <div id="calibration-content">
-        <p id="calibration-instruction" aria-live="polite">Preparing microphone...</p>
-        <div id="calibration-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="content-constrained">
+        <h2>Voice Calibration</h2>
+        <div id="calibration-content">
+          <p id="calibration-instruction" aria-live="polite">Preparing microphone...</p>
+          <div id="calibration-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
       </div>
     </div>
 
@@ -173,27 +179,29 @@
     </div>
 
     <div id="results-screen" class="screen" role="main">
-      <h2>Challenge Complete!</h2>
-      <div id="results-content" role="region" aria-label="Challenge results">
-        <div class="grade" id="final-grade" aria-label="Final grade">-</div>
-        <div class="score-display">
-          <span class="label">Final Score:</span>
-          <span id="final-score" class="value" aria-live="polite">0</span>
+      <div class="content-constrained">
+        <h2>Challenge Complete!</h2>
+        <div id="results-content" role="region" aria-label="Challenge results">
+          <div class="grade" id="final-grade" aria-label="Final grade">-</div>
+          <div class="score-display">
+            <span class="label">Final Score:</span>
+            <span id="final-score" class="value" aria-live="polite">0</span>
+          </div>
+          <div class="stats" id="stats-display" role="list" aria-label="Performance statistics"></div>
         </div>
-        <div class="stats" id="stats-display" role="list" aria-label="Performance statistics"></div>
+        <nav aria-label="Results actions" class="menu-buttons">
+          <button id="play-again-button"
+                  class="primary-button"
+                  aria-label="Play again (R key)">
+            Play Again
+          </button>
+          <button id="menu-button"
+                  class="secondary-button"
+                  aria-label="Return to main menu">
+            Main Menu
+          </button>
+        </nav>
       </div>
-      <nav aria-label="Results actions" class="menu-buttons">
-        <button id="play-again-button"
-                class="primary-button"
-                aria-label="Play again (R key)">
-          Play Again
-        </button>
-        <button id="menu-button"
-                class="secondary-button"
-                aria-label="Return to main menu">
-          Main Menu
-        </button>
-      </nav>
     </div>
 
     <div id="error-screen" class="screen" role="alert">
