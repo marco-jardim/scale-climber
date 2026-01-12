@@ -57,20 +57,32 @@ function showError(message) {
 }
 
 /**
- * Start challenge mode
+ * Show calibration ready screen
  */
-async function startChallenge() {
+function showCalibrationReady() {
+  showScreen('calibration-ready');
+}
+
+/**
+ * Start calibration process
+ */
+async function startCalibration() {
   try {
     showScreen('calibration');
 
+    // Resume AudioContext if suspended (required for Safari/iOS)
+    if (gameEngine.audioManager) {
+      await gameEngine.audioManager.resume();
+    }
+
     // Run calibration
-    const calibrationResult = await gameEngine.startCalibration((progress) => {
+    const calibrationResult = await gameEngine.startCalibration((state, progress, message) => {
       const instruction = document.getElementById('calibration-instruction');
-      instruction.textContent = `Calibrating... ${Math.round(progress * 100)}%`;
+      instruction.textContent = message || `Calibrating... ${Math.round(progress * 100)}%`;
     });
 
     if (!calibrationResult.success) {
-      throw new Error('Calibration failed');
+      throw new Error(calibrationResult.message || 'Calibration failed');
     }
 
     // Start challenge
@@ -230,7 +242,17 @@ function toggleHUD(visible) {
 // Button event listeners
 document.getElementById('start-button')?.addEventListener('click', () => {
   if (audioFeedback) audioFeedback.playClick();
-  startChallenge();
+  showCalibrationReady();
+});
+
+document.getElementById('begin-calibration-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
+  startCalibration();
+});
+
+document.getElementById('cancel-calibration-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
+  showScreen('start');
 });
 
 document.getElementById('practice-button')?.addEventListener('click', () => {

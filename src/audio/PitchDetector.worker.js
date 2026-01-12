@@ -168,17 +168,13 @@ function calculateVolume(buffer) {
 
 // Worker message handler
 self.onmessage = function (e) {
-  const { type, data } = e.data;
-  // eslint-disable-next-line no-console
-  console.log('Worker received message:', type);
+  const { type, data, id } = e.data;
 
   switch (type) {
     case 'init':
       sampleRate = data.sampleRate || 44100;
       bufferSize = data.bufferSize || 1024;
       yinThreshold = data.yinThreshold || 0.15;
-      // eslint-disable-next-line no-console
-      console.log('Worker initialized with:', { sampleRate, bufferSize, yinThreshold });
       self.postMessage({
         type: 'initialized',
         data: { sampleRate, bufferSize, yinThreshold },
@@ -186,7 +182,12 @@ self.onmessage = function (e) {
       break;
 
     case 'process': {
-      const { buffer, id } = data;
+      const { buffer } = data;
+
+      if (!buffer) {
+        console.error('Worker received process message with no buffer!');
+        return;
+      }
 
       // Calculate volume
       const volume = calculateVolume(buffer);

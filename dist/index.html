@@ -12,11 +12,11 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/scale-climber/manifest.json">
 
-  <script type="module" crossorigin src="/scale-climber/assets/index-C_Vqc0S6.js"></script>
-  <link rel="modulepreload" crossorigin href="/scale-climber/assets/audio-Ce-gjsOr.js">
-  <link rel="modulepreload" crossorigin href="/scale-climber/assets/game-logic-VRbJBiwh.js">
+  <script type="module" crossorigin src="/scale-climber/assets/index-CZJGPjKB.js"></script>
+  <link rel="modulepreload" crossorigin href="/scale-climber/assets/audio-BzDFhBRO.js">
+  <link rel="modulepreload" crossorigin href="/scale-climber/assets/game-logic-qKkHWAKI.js">
   <link rel="modulepreload" crossorigin href="/scale-climber/assets/visuals-DAVB2UIO.js">
-  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-BlgrYCCD.css">
+  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-D-Vv-VNQ.css">
 <link rel="manifest" href="/scale-climber/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/scale-climber/registerSW.js"></script></head>
 <body>
   <!-- Screen reader announcements -->
@@ -48,6 +48,28 @@
       <div class="keyboard-hint" aria-label="Keyboard shortcuts">
         Press <kbd>?</kbd> for keyboard shortcuts
       </div>
+    </div>
+
+    <div id="calibration-ready-screen" class="screen" role="main">
+      <h2>🎤 Get Ready to Calibrate</h2>
+      <div class="calibration-instructions">
+        <p>Calibration will detect your vocal range in two steps:</p>
+        <ol>
+          <li><strong>Volume Test (3 seconds)</strong>
+            <br>Speak or sing to test your microphone</li>
+          <li><strong>Range Detection (10 seconds)</strong>
+            <br>Sing from your lowest to highest comfortable note</li>
+        </ol>
+        <p class="tip">💡 <strong>Tip:</strong> Make sure you're in a quiet environment and your microphone is working.</p>
+      </div>
+      <nav aria-label="Calibration actions" class="menu-buttons">
+        <button id="begin-calibration-button" class="primary-button" aria-label="Begin voice calibration">
+          I'm Ready - Start Calibration
+        </button>
+        <button id="cancel-calibration-button" class="text-button" aria-label="Cancel and return to menu">
+          Cancel
+        </button>
+      </nav>
     </div>
 
     <div id="calibration-screen" class="screen" role="status" aria-live="polite">

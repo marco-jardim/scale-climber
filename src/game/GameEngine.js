@@ -57,11 +57,7 @@ class GameEngine {
 
       // Initialize pitch detector
       this.pitchDetector = new PitchDetector(this.audioManager);
-      // eslint-disable-next-line no-console
-      console.log('About to initialize pitch detector...');
       await this.pitchDetector.init();
-      // eslint-disable-next-line no-console
-      console.log('Pitch detector initialized successfully');
 
       // Initialize calibration engine
       this.calibrationEngine = new CalibrationEngine(this.pitchDetector);

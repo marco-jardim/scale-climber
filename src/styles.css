@@ -267,10 +267,41 @@ button:focus-visible {
   gap: var(--spacing-sm);
 }
 
-/* Calibration screen */
+/* Calibration screens */
 #calibration-content {
   max-width: 500px;
   width: 100%;
+}
+
+.calibration-instructions {
+  max-width: 600px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.calibration-instructions p {
+  margin-bottom: var(--spacing-md);
+}
+
+.calibration-instructions ol {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.calibration-instructions li {
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.8;
+}
+
+.calibration-instructions .tip {
+  background-color: #FFF9E6;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--color-warning);
+  margin-bottom: 0;
 }
 
 #calibration-instruction {
