@@ -44,20 +44,26 @@ beforeAll(() => {
     })),
   };
 
-  // Mock localStorage
+  // Mock localStorage with actual storage implementation
+  const localStorageData = {};
   global.localStorage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
+    getItem: vi.fn((key) => localStorageData[key] || null),
+    setItem: vi.fn((key, value) => { localStorageData[key] = String(value); }),
+    removeItem: vi.fn((key) => { delete localStorageData[key]; }),
+    clear: vi.fn(() => { Object.keys(localStorageData).forEach(key => delete localStorageData[key]); }),
+    get length() { return Object.keys(localStorageData).length; },
+    key: vi.fn((index) => Object.keys(localStorageData)[index] || null),
   };
 
-  // Mock sessionStorage
+  // Mock sessionStorage with actual storage implementation
+  const sessionStorageData = {};
   global.sessionStorage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
+    getItem: vi.fn((key) => sessionStorageData[key] || null),
+    setItem: vi.fn((key, value) => { sessionStorageData[key] = String(value); }),
+    removeItem: vi.fn((key) => { delete sessionStorageData[key]; }),
+    clear: vi.fn(() => { Object.keys(sessionStorageData).forEach(key => delete sessionStorageData[key]); }),
+    get length() { return Object.keys(sessionStorageData).length; },
+    key: vi.fn((index) => Object.keys(sessionStorageData)[index] || null),
   };
 });
 
