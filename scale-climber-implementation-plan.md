@@ -22,24 +22,25 @@
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
-2. [User Research & Validation](#user-research--validation)
-3. [Project Overview](#project-overview)
-4. [Technical Architecture](#technical-architecture)
-5. [Phase 0: Setup & User Research](#phase-0-setup--user-research)
-6. [Phase 1: Audio Foundation](#phase-1-audio-foundation)
-7. [Phase 2: Game Logic](#phase-2-game-logic)
-8. [Phase 3: Visual Design](#phase-3-visual-design)
-9. [Phase 4: Polish & Accessibility](#phase-4-polish--accessibility)
-10. [Phase 5: Deployment](#phase-5-deployment)
-11. [Error Handling & Recovery](#error-handling--recovery)
-12. [Mobile-Specific Requirements](#mobile-specific-requirements)
-13. [Security & Privacy](#security--privacy)
-14. [Localization Strategy](#localization-strategy)
-15. [Implementation Timeline](#implementation-timeline)
-16. [Testing Strategy](#testing-strategy)
-17. [Risk Mitigation](#risk-mitigation)
-18. [Success Metrics](#success-metrics)
-19. [Appendices](#appendices)
+2. [Implementation Roadmap: Phase & Subphase Checklist](#implementation-roadmap-phase--subphase-checklist)
+3. [User Research & Validation](#user-research--validation)
+4. [Project Overview](#project-overview)
+5. [Technical Architecture](#technical-architecture)
+6. [Phase 0: Setup & User Research](#phase-0-setup--user-research)
+7. [Phase 1: Audio Foundation](#phase-1-audio-foundation)
+8. [Phase 2: Game Logic](#phase-2-game-logic)
+9. [Phase 3: Visual Design](#phase-3-visual-design)
+10. [Phase 4: Polish & Accessibility](#phase-4-polish--accessibility)
+11. [Phase 5: Deployment](#phase-5-deployment)
+12. [Error Handling & Recovery](#error-handling--recovery)
+13. [Mobile-Specific Requirements](#mobile-specific-requirements)
+14. [Security & Privacy](#security--privacy)
+15. [Localization Strategy](#localization-strategy)
+16. [Implementation Timeline](#implementation-timeline)
+17. [Testing Strategy](#testing-strategy)
+18. [Risk Mitigation](#risk-mitigation)
+19. [Success Metrics](#success-metrics)
+20. [Appendices](#appendices)
 
 ---
 
@@ -63,6 +64,721 @@
 2. Robust error handling for audio device edge cases
 3. Mobile-first performance optimization
 4. Comprehensive browser compatibility testing
+
+---
+
+## Implementation Roadmap: Phase & Subphase Checklist
+
+**Purpose**: This section provides a complete phase-by-phase breakdown with actionable subphases that an implementation agent can follow sequentially. Each phase concludes with a mandatory review, testing, and acceptance subphase.
+
+**Usage Instructions**:
+- Execute subphases in numerical order within each phase
+- Do not proceed to the next subphase until the current one's Definition of Done is met
+- Each phase ends with a review/testing/acceptance gate - all criteria must pass before moving to the next phase
+- Check off items as completed for progress tracking
+
+---
+
+### **PHASE 0: Setup & User Research** (Duration: 3-4 days)
+
+#### **Subphase 0.1: Project Initialization**
+**Objective**: Establish project infrastructure and development environment
+
+**Tasks**:
+- [ ] Initialize Git repository with main branch
+- [ ] Create complete project folder structure (see Technical Architecture section)
+- [ ] Setup Vite with configuration for Web Workers and optimized builds
+- [ ] Configure ESLint + Prettier with Airbnb style guide
+- [ ] Setup Vitest for unit testing
+- [ ] Setup Playwright for E2E testing
+- [ ] Create initial README.md with setup instructions
+- [ ] Configure GitHub Actions for basic CI pipeline
+
+**Definition of Done**:
+- [ ] `npm run dev` starts development server successfully
+- [ ] `npm run build` produces optimized bundle in dist/
+- [ ] `npm test` runs (even if no tests exist yet)
+- [ ] `npm run lint` passes with no errors
+- [ ] All team members can clone and run project locally
+- [ ] GitHub Actions workflow runs on push to main
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 0.2: User Research Execution**
+**Objective**: Validate core assumptions with target users
+
+**Tasks**:
+- [ ] Recruit 8-10 participants across voice types (bass, baritone, alto, soprano)
+- [ ] Conduct semi-structured interviews (20 min each)
+- [ ] Create interview synthesis document
+- [ ] Validate default octave ranges for different voice types
+- [ ] Confirm pitch tolerance thresholds (±10/25/50 cents)
+- [ ] Determine mobile vs desktop priority
+- [ ] Rank feature priorities based on user feedback
+- [ ] Document major blockers or concerns
+
+**Definition of Done**:
+- [ ] At least 6 interviews completed
+- [ ] Synthesis report created with key findings
+- [ ] Core game mechanic validated (70%+ positive reception)
+- [ ] Default settings determined (octave ranges, tolerances)
+- [ ] No critical blockers identified that invalidate approach
+
+**Estimated Time**: 2-3 days
+
+---
+
+#### **Subphase 0.3: Phase 0 Review, Testing & Acceptance**
+**Objective**: Verify infrastructure is ready and user research validates approach
+
+**Review Checklist**:
+- [ ] Development environment setup complete and tested
+- [ ] CI/CD pipeline operational
+- [ ] User research findings documented and actionable
+- [ ] Team alignment on validated assumptions
+- [ ] No major technical risks identified in setup
+
+**Testing**:
+- [ ] Build pipeline produces valid output
+- [ ] Linting rules are enforced
+- [ ] Git workflow is documented
+
+**Acceptance Criteria**:
+- [ ] All Phase 0 Definition of Done items are checked
+- [ ] Stakeholders approve user research findings
+- [ ] Technical Lead approves infrastructure setup
+- [ ] Green light to proceed to Phase 1
+
+**Estimated Time**: 0.5 day
+
+---
+
+### **PHASE 1: Audio Foundation** (Duration: 1.5 weeks)
+
+#### **Subphase 1.1: Audio Context Manager**
+**Objective**: Reliable AudioContext lifecycle management across browsers
+
+**Tasks**:
+- [ ] Create `src/audio/AudioContextManager.js`
+- [ ] Implement singleton pattern for single AudioContext instance
+- [ ] Handle AudioContext suspension/resumption (iOS Safari)
+- [ ] Implement microphone permission request flow
+- [ ] Add device disconnect detection and recovery
+- [ ] Support multiple sample rates (44.1kHz, 48kHz)
+- [ ] Write unit tests for AudioContextManager
+- [ ] Test on Chrome, Firefox, Safari (desktop + mobile)
+
+**Definition of Done**:
+- [ ] AudioContext initializes successfully on all target browsers
+- [ ] iOS Safari audio unlock pattern works correctly
+- [ ] Device disconnect triggers appropriate error handling
+- [ ] Singleton pattern prevents multiple context creation
+- [ ] Unit test coverage >90%
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 1.2: Pitch Detection (YIN Algorithm)**
+**Objective**: Accurate, low-latency pitch detection using YIN algorithm
+
+**Tasks**:
+- [ ] Create `src/audio/PitchDetector.js` with YIN implementation
+- [ ] Create `src/audio/PitchDetector.worker.js` for Web Worker execution
+- [ ] Implement Transferable Objects for zero-copy buffer transfer
+- [ ] Optimize YIN parameters (threshold=0.15, buffer=1024 samples)
+- [ ] Implement parabolic interpolation for sub-sample accuracy
+- [ ] Create `src/audio/NoteMapper.js` for frequency → note conversion
+- [ ] Calculate cent deviation from target pitch
+- [ ] Write comprehensive unit tests with generated sine waves
+- [ ] Profile performance: ensure <5ms processing time per buffer
+
+**Definition of Done**:
+- [ ] Detects A4 (440Hz) with ±5 cent accuracy
+- [ ] Processes audio buffer in <5ms (Web Worker)
+- [ ] Correctly identifies all notes C4-C5
+- [ ] Rejects noise with low confidence (<0.3)
+- [ ] Handles edge cases (silence, clipping, harmonics)
+- [ ] Unit test coverage >95%
+- [ ] Latency from mic input to detection result <50ms
+
+**Estimated Time**: 3 days
+
+---
+
+#### **Subphase 1.3: Calibration Engine**
+**Objective**: Automatic voice range detection and octave recommendation
+
+**Tasks**:
+- [ ] Create `src/audio/CalibrationEngine.js`
+- [ ] Implement 3-phase calibration flow:
+  - Phase 1: Volume test (detect if mic is working)
+  - Phase 2: Range detection (10 seconds of singing various pitches)
+  - Phase 3: Analysis and octave recommendation
+- [ ] Detect lowest and highest confident pitches
+- [ ] Recommend optimal octave based on voice range
+- [ ] Handle calibration failures gracefully
+- [ ] Create `src/ui/CalibrationScreen.js` for user interface
+- [ ] Write unit tests for analysis algorithms
+- [ ] Test with diverse voice types (real users if possible)
+
+**Definition of Done**:
+- [ ] Calibration completes successfully in 15-20 seconds
+- [ ] Correctly recommends octave for bass, baritone, alto, soprano
+- [ ] Handles edge cases (user doesn't sing, too quiet, too loud)
+- [ ] UI provides clear instructions and feedback
+- [ ] Unit test coverage >90%
+- [ ] Tested with at least 5 different voice types
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 1.4: Phase 1 Review, Testing & Acceptance**
+**Objective**: Verify audio foundation is robust and accurate
+
+**Review Checklist**:
+- [ ] AudioContextManager handles all browser quirks
+- [ ] Pitch detection accuracy meets ±5 cent requirement
+- [ ] Calibration engine provides sensible recommendations
+- [ ] Code quality: no type errors, follows style guide
+- [ ] Documentation: all public APIs documented
+
+**Testing**:
+- [ ] Unit tests: All pass, coverage >90%
+- [ ] Integration test: AudioContextManager + PitchDetector end-to-end
+- [ ] Manual test: Play sine wave tones (A4, C4, C5, G4) via speaker near mic, verify detection
+- [ ] Browser compatibility: Test on Chrome, Firefox, Safari (desktop + iOS)
+- [ ] Performance test: Verify <50ms latency using Performance API
+
+**Acceptance Criteria**:
+- [ ] All Definition of Done items from subphases 1.1-1.3 are checked
+- [ ] Technical Lead code review approved
+- [ ] Pitch detection demo works reliably (can detect humming/singing)
+- [ ] No critical bugs or performance issues
+- [ ] Green light to proceed to Phase 2
+
+**Estimated Time**: 1 day
+
+---
+
+### **PHASE 2: Game Logic** (Duration: 1 week)
+
+#### **Subphase 2.1: Game State Machine**
+**Objective**: Centralized game state management and orchestration
+
+**Tasks**:
+- [ ] Create `src/game/GameEngine.js`
+- [ ] Implement state machine with states: idle, calibration, countdown, playing, paused, complete, failed, error
+- [ ] Handle state transitions with validation
+- [ ] Integrate AudioContextManager and PitchDetector
+- [ ] Implement game loop using requestAnimationFrame
+- [ ] Add event emitter for UI notifications
+- [ ] Implement pause/resume functionality
+- [ ] Write unit tests for state transitions
+
+**Definition of Done**:
+- [ ] All game states implemented and transitions work correctly
+- [ ] Game loop runs at stable frame rate
+- [ ] Events properly emitted for UI updates
+- [ ] Pause/resume works without audio issues
+- [ ] Unit test coverage >85%
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 2.2: Scale Challenge Logic**
+**Objective**: Core gameplay mechanic for 8-note scale progression
+
+**Tasks**:
+- [ ] Create `src/game/ScaleChallenge.js`
+- [ ] Implement note progression (C-D-E-F-G-A-B-C)
+- [ ] Define pitch tolerance thresholds by difficulty (easy/normal/hard)
+- [ ] Implement hold timer (must sustain note for 1.5 seconds)
+- [ ] Track note attempts and accuracy
+- [ ] Handle note hit/miss events
+- [ ] Implement failure conditions (3 failures or 2 minutes elapsed)
+- [ ] Write unit tests for game logic
+
+**Definition of Done**:
+- [ ] Full scale can be completed by singing correct pitches
+- [ ] Note validation works with tolerance thresholds
+- [ ] Hold timer accurately requires sustained pitch
+- [ ] Failure conditions trigger correctly
+- [ ] Unit test coverage >90%
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 2.3: Practice Mode**
+**Objective**: Single-note practice without time pressure
+
+**Tasks**:
+- [ ] Create `src/game/PracticeMode.js`
+- [ ] Allow user to select any note to practice
+- [ ] Remove timer/failure conditions
+- [ ] Display real-time pitch deviation (cents)
+- [ ] Add "Next Note" and "Random Note" options
+- [ ] Implement progress tracking (attempts, success rate)
+- [ ] Write unit tests
+
+**Definition of Done**:
+- [ ] User can select and practice any note
+- [ ] Real-time feedback shows cent deviation
+- [ ] No time pressure or failure states
+- [ ] Unit test coverage >85%
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 2.4: Score System**
+**Objective**: Calculate scores and grades based on performance
+
+**Tasks**:
+- [ ] Create `src/game/ScoreSystem.js`
+- [ ] Implement scoring formula:
+  - Perfect: 100 points (within ±10 cents)
+  - Great: 75 points (within ±25 cents)
+  - OK: 50 points (within ±50 cents)
+- [ ] Add combo bonus (consecutive perfects)
+- [ ] Calculate time bonus (faster completion)
+- [ ] Implement grade system (S/A/B/C/D based on total score)
+- [ ] Write comprehensive unit tests
+
+**Definition of Done**:
+- [ ] Score calculation matches specification
+- [ ] Combo bonuses apply correctly
+- [ ] Grade thresholds assign appropriate letter grades
+- [ ] Unit test coverage 100% (pure functions)
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 2.5: State Recovery**
+**Objective**: Session persistence and high score tracking
+
+**Tasks**:
+- [ ] Create `src/game/StateRecovery.js`
+- [ ] Implement session save/restore using SessionStorage
+- [ ] Auto-save game state every 5 seconds during play
+- [ ] Save high scores to LocalStorage
+- [ ] Implement resume functionality on page reload
+- [ ] Handle corrupt/invalid stored data gracefully
+- [ ] Write unit tests with mocked storage
+
+**Definition of Done**:
+- [ ] Game state persists across page reload
+- [ ] High scores saved and retrieved correctly
+- [ ] Corrupt data doesn't break application
+- [ ] Unit test coverage >90%
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 2.6: Phase 2 Review, Testing & Acceptance**
+**Objective**: Verify game logic is correct and complete
+
+**Review Checklist**:
+- [ ] State machine handles all transitions correctly
+- [ ] Scale Challenge gameplay feels fair and responsive
+- [ ] Score calculations are accurate and consistent
+- [ ] Code quality: no type errors, follows style guide
+- [ ] All game modes (Challenge, Practice) implemented
+
+**Testing**:
+- [ ] Unit tests: All pass, coverage >85% overall
+- [ ] Integration test: Full game flow from start to completion
+- [ ] Manual test: Play through complete scale challenge, verify scoring
+- [ ] Edge case testing: Pause/resume, failure conditions, calibration edge cases
+- [ ] Performance test: Game loop maintains stable frame rate
+
+**Acceptance Criteria**:
+- [ ] All Definition of Done items from subphases 2.1-2.5 are checked
+- [ ] Can complete full scale challenge by singing
+- [ ] Scoring and grading work correctly
+- [ ] No critical bugs in game logic
+- [ ] Product Manager approval on gameplay feel
+- [ ] Green light to proceed to Phase 3
+
+**Estimated Time**: 1 day
+
+---
+
+### **PHASE 3: Visual Design** (Duration: 1.5 weeks)
+
+#### **Subphase 3.1: Art Direction & Design System**
+**Objective**: Define visual style and create design assets
+
+**Tasks**:
+- [ ] Define color palette (primary, secondary, accent, background)
+- [ ] Create character sprite sheets (idle, climbing, celebrating, failing)
+- [ ] Design background layers for parallax effect
+- [ ] Create UI mockups in Figma (all screens)
+- [ ] Define typography and spacing system
+- [ ] Export assets optimized for web (PNG sprite sheets, compressed)
+- [ ] Document design system in `docs/DESIGN.md`
+
+**Definition of Done**:
+- [ ] Complete color palette defined
+- [ ] All sprite sheets created and exported
+- [ ] Background assets created (3+ layers for parallax)
+- [ ] Figma mockups approved by stakeholders
+- [ ] Assets optimized and placed in `public/assets/`
+
+**Estimated Time**: 2 days (or outsource to designer)
+
+---
+
+#### **Subphase 3.2: Canvas Renderer Architecture**
+**Objective**: High-performance 60fps rendering system
+
+**Tasks**:
+- [ ] Create `src/visuals/Renderer.js`
+- [ ] Implement frame budget management (16.6ms target)
+- [ ] Create `src/visuals/PerformanceMonitor.js` for frame time tracking
+- [ ] Implement adaptive quality degradation if frame time exceeds budget
+- [ ] Setup render pipeline: clear → background → character → HUD → particles
+- [ ] Implement viewport scaling for responsive design
+- [ ] Write performance tests
+
+**Definition of Done**:
+- [ ] Renderer maintains 60fps on mid-range desktop
+- [ ] Adaptive quality reduces rendering load if needed
+- [ ] Viewport scales correctly for different screen sizes
+- [ ] Performance monitoring logs frame times
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 3.3: Character Animation**
+**Objective**: Expressive character responding to gameplay
+
+**Tasks**:
+- [ ] Create `src/visuals/Character.js`
+- [ ] Implement sprite animation system (frame-based)
+- [ ] Define animation states: idle, climbing, perfect, great, ok, miss, celebrate
+- [ ] Sync animations with game state events
+- [ ] Add smooth transitions between animations
+- [ ] Implement character positioning (vertical movement up staircase)
+- [ ] Test animation performance
+
+**Definition of Done**:
+- [ ] All animation states implemented
+- [ ] Character responds immediately to note events
+- [ ] Animations loop smoothly
+- [ ] Character position reflects progress through scale
+- [ ] Rendering performance within budget (3ms allocation)
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 3.4: Pitch Meter Visualization**
+**Objective**: Real-time visual feedback for pitch accuracy
+
+**Tasks**:
+- [ ] Create `src/visuals/PitchMeter.js`
+- [ ] Design meter UI (horizontal bar with target note in center)
+- [ ] Show current pitch as moving indicator
+- [ ] Color-code accuracy zones (green=perfect, yellow=great, red=off)
+- [ ] Display current note name and target note
+- [ ] Add smooth interpolation for indicator movement
+- [ ] Test readability at various screen sizes
+
+**Definition of Done**:
+- [ ] Pitch meter updates in real-time (<50ms lag)
+- [ ] Clearly indicates pitch deviation from target
+- [ ] Readable on both desktop and mobile
+- [ ] Rendering performance within budget (3ms allocation)
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 3.5: Particle System**
+**Objective**: Celebration effects for successful notes
+
+**Tasks**:
+- [ ] Create `src/visuals/ParticleSystem.js`
+- [ ] Implement particle emitter with velocity, gravity, lifetime
+- [ ] Create particle effects for: perfect hit, great hit, combo milestone
+- [ ] Optimize particle count for performance (max 100 particles)
+- [ ] Add particle pooling to avoid GC pressure
+- [ ] Test particle effects on low-end devices
+
+**Definition of Done**:
+- [ ] Particle effects trigger on appropriate events
+- [ ] Performance remains stable with max particles
+- [ ] Effects are visually appealing and not distracting
+- [ ] Rendering performance within budget (2ms allocation)
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 3.6: Phase 3 Review, Testing & Acceptance**
+**Objective**: Verify visual design is polished and performant
+
+**Review Checklist**:
+- [ ] Visual design matches approved mockups
+- [ ] All animations are smooth and expressive
+- [ ] Pitch meter provides clear, immediate feedback
+- [ ] Performance meets 60fps target on desktop, 30fps on mobile
+- [ ] Code quality: rendering code is clean and maintainable
+
+**Testing**:
+- [ ] Performance test: Run game for 5 minutes, verify stable frame rate
+- [ ] Visual regression: Compare screenshots to design mockups
+- [ ] Responsive design: Test on 320px, 768px, 1920px widths
+- [ ] Device testing: Test on actual mobile devices (iOS + Android)
+- [ ] Accessibility: Verify contrast ratios meet WCAG AA
+
+**Acceptance Criteria**:
+- [ ] All Definition of Done items from subphases 3.1-3.5 are checked
+- [ ] Game looks visually polished and professional
+- [ ] Performance targets met (60fps desktop, 30fps mobile)
+- [ ] No visual bugs or glitches
+- [ ] UX Designer approval on visual design
+- [ ] Green light to proceed to Phase 4
+
+**Estimated Time**: 1 day
+
+---
+
+### **PHASE 4: Polish & Accessibility** (Duration: 1 week)
+
+#### **Subphase 4.1: Keyboard Controls**
+**Objective**: Full keyboard navigation and shortcuts
+
+**Tasks**:
+- [ ] Create `src/utils/keyboardControls.js`
+- [ ] Implement keyboard shortcuts:
+  - Space: Pause/Resume
+  - R: Restart game
+  - M: Mute/Unmute
+  - Esc: Open settings
+  - Tab: Navigate UI elements
+  - Enter: Confirm selections
+- [ ] Add visual indicators for focused elements
+- [ ] Prevent default browser shortcuts from interfering
+- [ ] Write unit tests for keyboard event handlers
+
+**Definition of Done**:
+- [ ] All keyboard shortcuts work correctly
+- [ ] Keyboard navigation covers all UI elements
+- [ ] Focus indicators are visible and clear
+- [ ] No conflicts with browser shortcuts
+- [ ] Unit test coverage >90%
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 4.2: Accessibility Features**
+**Objective**: WCAG AA compliance for inclusive design
+
+**Tasks**:
+- [ ] Add ARIA labels to all interactive elements
+- [ ] Implement ARIA live regions for dynamic content
+- [ ] Add screen reader announcements for game events
+- [ ] Ensure color contrast ratios meet WCAG AA (4.5:1 for text)
+- [ ] Add skip links for keyboard users
+- [ ] Test with screen reader (NVDA, JAWS, VoiceOver)
+- [ ] Add reduced motion preference support
+- [ ] Run Lighthouse accessibility audit
+
+**Definition of Done**:
+- [ ] Lighthouse accessibility score = 100
+- [ ] All interactive elements have ARIA labels
+- [ ] Screen reader can navigate and understand game state
+- [ ] Color contrast meets WCAG AA
+- [ ] Reduced motion preference respected
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 4.3: Audio Feedback**
+**Objective**: Sound effects and reference tones
+
+**Tasks**:
+- [ ] Source or create sound effects:
+  - Note hit (perfect, great, ok)
+  - Note miss
+  - Game complete
+  - Combo milestone
+- [ ] Implement reference tone playback (sine wave at target frequency)
+- [ ] Add volume controls in settings
+- [ ] Ensure audio feedback doesn't interfere with pitch detection
+- [ ] Optimize audio files (WebM/Opus format, <10KB each)
+- [ ] Test audio playback on all browsers
+
+**Definition of Done**:
+- [ ] All sound effects implemented and play correctly
+- [ ] Reference tone accurately plays target pitch
+- [ ] Volume controls work properly
+- [ ] Audio feedback doesn't cause mic feedback loops
+- [ ] Total audio assets <50KB
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 4.4: Phase 4 Review, Testing & Accessibility**
+**Objective**: Verify polish and accessibility standards are met
+
+**Review Checklist**:
+- [ ] Keyboard navigation is complete and intuitive
+- [ ] Accessibility features meet WCAG AA standards
+- [ ] Audio feedback enhances gameplay experience
+- [ ] Code quality: no accessibility violations
+
+**Testing**:
+- [ ] Lighthouse audit: Accessibility score 100
+- [ ] Screen reader testing: NVDA (Windows), VoiceOver (Mac/iOS)
+- [ ] Keyboard-only playthrough: Complete game without mouse
+- [ ] Audio testing: Verify all sounds play correctly, no distortion
+- [ ] User testing: Have users with disabilities test and provide feedback
+
+**Acceptance Criteria**:
+- [ ] All Definition of Done items from subphases 4.1-4.3 are checked
+- [ ] Lighthouse accessibility score = 100
+- [ ] Keyboard navigation allows full gameplay
+- [ ] Screen reader provides meaningful feedback
+- [ ] QA Lead approval on accessibility compliance
+- [ ] Green light to proceed to Phase 5
+
+**Estimated Time**: 1 day
+
+---
+
+### **PHASE 5: Deployment** (Duration: 1 week)
+
+#### **Subphase 5.1: Service Worker**
+**Objective**: Offline capability and asset caching
+
+**Tasks**:
+- [ ] Create `src/service-worker.js` using Workbox
+- [ ] Implement cache-first strategy for static assets
+- [ ] Implement network-only for analytics
+- [ ] Add offline fallback page
+- [ ] Configure cache versioning and invalidation
+- [ ] Test install/update flow
+- [ ] Verify offline gameplay works
+
+**Definition of Done**:
+- [ ] Service worker registers successfully
+- [ ] Assets cached on first visit
+- [ ] Game works offline (airplane mode)
+- [ ] Cache updates when new version deployed
+- [ ] Tested on Chrome, Firefox, Safari
+
+**Estimated Time**: 2 days
+
+---
+
+#### **Subphase 5.2: Build Configuration**
+**Objective**: Optimized production builds
+
+**Tasks**:
+- [ ] Configure Vite for optimal production builds
+- [ ] Implement code splitting (audio, game, visuals chunks)
+- [ ] Enable minification and tree-shaking
+- [ ] Optimize images and assets
+- [ ] Generate source maps for error tracking
+- [ ] Configure base URL for GitHub Pages deployment
+- [ ] Verify bundle size <250KB gzipped
+
+**Definition of Done**:
+- [ ] Production build completes without errors
+- [ ] Bundle size target met (<250KB gzipped)
+- [ ] Code splitting reduces initial load time
+- [ ] Assets are optimized and compressed
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 5.3: GitHub Actions CI/CD**
+**Objective**: Automated testing and deployment pipeline
+
+**Tasks**:
+- [ ] Create `.github/workflows/test.yml` for PR validation
+- [ ] Create `.github/workflows/deploy.yml` for production deployment
+- [ ] Configure automated testing on all PRs
+- [ ] Configure automated deployment to GitHub Pages on main branch merge
+- [ ] Add status badges to README
+- [ ] Test deployment pipeline end-to-end
+- [ ] Document rollback procedure
+
+**Definition of Done**:
+- [ ] CI runs tests on every PR
+- [ ] CD deploys to GitHub Pages on main branch push
+- [ ] Deployment completes in <5 minutes
+- [ ] Rollback procedure documented and tested
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 5.4: Security Headers**
+**Objective**: Production-ready security configuration
+
+**Tasks**:
+- [ ] Create `public/_headers` file for GitHub Pages
+- [ ] Configure Content Security Policy (CSP)
+- [ ] Add X-Frame-Options header
+- [ ] Add X-Content-Type-Options header
+- [ ] Configure CORS if needed
+- [ ] Test security headers with securityheaders.com
+- [ ] Document security configuration
+
+**Definition of Done**:
+- [ ] All security headers configured correctly
+- [ ] CSP doesn't block legitimate resources
+- [ ] Security headers score A+ on securityheaders.com
+- [ ] No console errors from CSP violations
+
+**Estimated Time**: 1 day
+
+---
+
+#### **Subphase 5.5: Phase 5 Review, Testing & Acceptance**
+**Objective**: Verify production deployment is ready
+
+**Review Checklist**:
+- [ ] Service worker provides reliable offline experience
+- [ ] Build configuration produces optimal bundles
+- [ ] CI/CD pipeline is stable and automated
+- [ ] Security headers are properly configured
+- [ ] Documentation is complete
+
+**Testing**:
+- [ ] End-to-end deployment test: Merge PR, verify production deployment
+- [ ] Offline testing: Install PWA, disconnect network, play game
+- [ ] Security audit: Run securityheaders.com scan
+- [ ] Performance audit: Lighthouse scores (Performance >90, A11y 100, Best Practices 100, SEO >90)
+- [ ] Cross-browser testing: Final verification on all target browsers
+- [ ] Load testing: Verify app handles concurrent users (if applicable)
+
+**Acceptance Criteria**:
+- [ ] All Definition of Done items from subphases 5.1-5.4 are checked
+- [ ] Game is live on GitHub Pages at production URL
+- [ ] Lighthouse scores meet targets (Performance >90, Accessibility 100, Best Practices 100, SEO >90)
+- [ ] PWA installs correctly on desktop and mobile
+- [ ] No critical bugs in production
+- [ ] All stakeholders approve for public release
+- [ ] **PROJECT COMPLETE**
+
+**Estimated Time**: 2 days
 
 ---
 
