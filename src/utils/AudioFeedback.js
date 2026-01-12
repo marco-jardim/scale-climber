@@ -19,15 +19,18 @@ class AudioFeedback {
    * @returns {Promise} Resolves when all sounds loaded
    */
   async loadSounds() {
+    // Get base URL from Vite (handles /scale-climber/ in production, / in dev)
+    const baseUrl = import.meta.env.BASE_URL || '/';
+
     const soundFiles = {
-      perfect: '/assets/sounds/perfect.opus',
-      great: '/assets/sounds/great.opus',
-      ok: '/assets/sounds/ok.opus',
-      miss: '/assets/sounds/miss.opus',
-      combo: '/assets/sounds/combo.opus',
-      victory: '/assets/sounds/victory.opus',
-      failure: '/assets/sounds/failure.opus',
-      click: '/assets/sounds/click.opus',
+      perfect: `${baseUrl}assets/sounds/perfect.opus`,
+      great: `${baseUrl}assets/sounds/great.opus`,
+      ok: `${baseUrl}assets/sounds/ok.opus`,
+      miss: `${baseUrl}assets/sounds/miss.opus`,
+      combo: `${baseUrl}assets/sounds/combo.opus`,
+      victory: `${baseUrl}assets/sounds/victory.opus`,
+      failure: `${baseUrl}assets/sounds/failure.opus`,
+      click: `${baseUrl}assets/sounds/click.opus`,
     };
 
     // Fallback to silent audio if files don't exist
