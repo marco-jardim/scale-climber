@@ -362,3 +362,193 @@ button:focus-visible {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 1000;
+  border-radius: 0 0 var(--border-radius) 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Keyboard hint */
+.keyboard-hint {
+  margin-top: var(--spacing-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.keyboard-hint kbd {
+  background-color: var(--color-bg-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  border: 1px solid var(--color-text-secondary);
+}
+
+/* Help overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay-content {
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.overlay-content h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.overlay-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+}
+
+.overlay-content th {
+  background-color: var(--color-bg);
+  padding: var(--spacing-sm);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.overlay-content td {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-bg);
+}
+
+.overlay-content kbd {
+  background-color: var(--color-bg-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  border: 1px solid var(--color-text-secondary);
+  display: inline-block;
+}
+
+/* Enhanced focus indicators */
+.focus-visible *:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Reduced motion support (class-based) */
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* High contrast mode */
+.high-contrast {
+  --color-perfect: #00FF00;
+  --color-great: #FFFF00;
+  --color-good: #FFA500;
+  --color-ok: #FF6600;
+  --color-miss: #FF0000;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #CCCCCC;
+  --color-bg: #000000;
+  --color-bg-light: #1a1a1a;
+  --color-primary: #00AAFF;
+  --color-secondary: #AA00FF;
+}
+
+.high-contrast button {
+  border: 2px solid currentColor;
+}
+
+.high-contrast *:focus-visible {
+  outline: 4px solid #FFFF00;
+  outline-offset: 4px;
+}
+
+/* Colorblind mode: Deuteranopia (red-green) */
+[data-colorblind-mode="deuteranopia"] {
+  --color-perfect: #0088FF;
+  --color-great: #FFDD00;
+  --color-good: #FF8800;
+  --color-ok: #FF6600;
+  --color-miss: #FF0066;
+}
+
+/* Colorblind mode: Protanopia (red-blind) */
+[data-colorblind-mode="protanopia"] {
+  --color-perfect: #0088FF;
+  --color-great: #FFDD00;
+  --color-good: #FF8800;
+  --color-ok: #FF6600;
+  --color-miss: #8800FF;
+}
+
+/* Colorblind mode: Tritanopia (blue-yellow) */
+[data-colorblind-mode="tritanopia"] {
+  --color-perfect: #FF00FF;
+  --color-great: #00FFFF;
+  --color-good: #FF8800;
+  --color-ok: #FF6600;
+  --color-miss: #FF0000;
+}
+
+/* Colorblind patterns (additional visual indicators) */
+[data-colorblind-mode]:not([data-colorblind-mode="none"]) .grade::before {
+  content: '●';
+  margin-right: var(--spacing-sm);
+}
+
+/* Text scaling support - ensure min font sizes */
+@media (min-width: 320px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Support up to 200% browser zoom */
+@media (prefers-contrast: more) {
+  :root {
+    --border-width: 2px;
+  }
+
+  button,
+  .overlay-content,
+  #hud > div {
+    border: var(--border-width) solid currentColor;
+  }
+
+  *:focus-visible {
+    outline-width: 4px;
+  }
+}

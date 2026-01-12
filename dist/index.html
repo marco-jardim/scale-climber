@@ -12,61 +12,177 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/scale-climber/manifest.json">
 
-  <script type="module" crossorigin src="/scale-climber/assets/index-DAEU7IRY.js"></script>
-  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-lT3l8yic.css">
+  <script type="module" crossorigin src="/scale-climber/assets/index-Bl6MqsnI.js"></script>
+  <link rel="stylesheet" crossorigin href="/scale-climber/assets/index-Cvdae5B0.css">
 </head>
 <body>
-  <div id="app">
-    <div id="loading-screen" class="screen active">
+  <!-- Screen reader announcements -->
+  <div id="status-announce" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <div id="app" role="application" aria-label="Scale Climber - Vocal Pitch Training Game">
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="loading-screen" class="screen active" role="status" aria-live="polite">
       <h1>🎵 Scale Climber</h1>
-      <p>Loading...</p>
+      <p>Loading game...</p>
     </div>
 
-    <div id="start-screen" class="screen">
+    <div id="start-screen" class="screen" role="main">
       <h1>🎵 Scale Climber</h1>
       <p class="tagline">Climb the musical mountain, one note at a time!</p>
-      <button id="start-button" class="primary-button">Start Game</button>
-      <button id="practice-button" class="secondary-button">Practice Mode</button>
-      <button id="settings-button" class="text-button">Settings</button>
+      <nav aria-label="Game menu" class="menu-buttons">
+        <button id="start-button" class="primary-button" aria-label="Start challenge mode">
+          Start Game
+        </button>
+        <button id="practice-button" class="secondary-button" aria-label="Start practice mode (no time limit)">
+          Practice Mode
+        </button>
+        <button id="settings-button" class="text-button" aria-label="Open settings menu">
+          Settings
+        </button>
+      </nav>
+      <div class="keyboard-hint" aria-label="Keyboard shortcuts">
+        Press <kbd>?</kbd> for keyboard shortcuts
+      </div>
     </div>
 
-    <div id="calibration-screen" class="screen">
+    <div id="calibration-screen" class="screen" role="status" aria-live="polite">
       <h2>Voice Calibration</h2>
       <div id="calibration-content">
-        <p id="calibration-instruction">Preparing...</p>
-        <div id="calibration-progress"></div>
+        <p id="calibration-instruction" aria-live="polite">Preparing microphone...</p>
+        <div id="calibration-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
 
-    <div id="game-screen" class="screen">
-      <canvas id="game-canvas"></canvas>
-      <div id="hud">
-        <div id="score">Score: <span id="score-value">0</span></div>
-        <div id="current-note">Target: <span id="note-value">-</span></div>
-        <div id="combo">Combo: <span id="combo-value">0</span></div>
-      </div>
-      <button id="pause-button" class="icon-button" aria-label="Pause">⏸</button>
-    </div>
+    <div id="game-screen" class="screen" role="main">
+      <div id="main-content" tabindex="-1">
+        <!-- Canvas for visual game representation -->
+        <canvas id="game-canvas"
+                role="img"
+                aria-label="Game visualization showing character climbing musical stairs">
+        </canvas>
 
-    <div id="results-screen" class="screen">
-      <h2>Results</h2>
-      <div id="results-content">
-        <div class="grade" id="final-grade">-</div>
-        <div class="score-display">
-          <span class="label">Score:</span>
-          <span id="final-score" class="value">0</span>
+        <!-- HUD with live regions for screen readers -->
+        <div id="hud" role="region" aria-label="Game information">
+          <div id="score" aria-label="Current score">
+            Score: <span id="score-value" aria-live="polite">0</span>
+          </div>
+          <div id="current-note" aria-label="Target note">
+            Target: <span id="note-value" aria-live="assertive">-</span>
+          </div>
+          <div id="combo" aria-label="Combo multiplier">
+            Combo: <span id="combo-value" aria-live="polite">0</span>x
+          </div>
         </div>
-        <div class="stats" id="stats-display"></div>
+
+        <!-- Pitch feedback for screen readers -->
+        <div id="pitch-feedback" aria-live="polite" aria-atomic="false" class="sr-only"></div>
+
+        <!-- Game controls -->
+        <div class="game-controls" role="group" aria-label="Game controls">
+          <button id="pause-button"
+                  class="icon-button"
+                  aria-label="Pause game (Space key)">
+            ⏸
+          </button>
+        </div>
       </div>
-      <button id="play-again-button" class="primary-button">Play Again</button>
-      <button id="menu-button" class="secondary-button">Main Menu</button>
     </div>
 
-    <div id="error-screen" class="screen">
+    <div id="results-screen" class="screen" role="main">
+      <h2>Challenge Complete!</h2>
+      <div id="results-content" role="region" aria-label="Challenge results">
+        <div class="grade" id="final-grade" aria-label="Final grade">-</div>
+        <div class="score-display">
+          <span class="label">Final Score:</span>
+          <span id="final-score" class="value" aria-live="polite">0</span>
+        </div>
+        <div class="stats" id="stats-display" role="list" aria-label="Performance statistics"></div>
+      </div>
+      <nav aria-label="Results actions" class="menu-buttons">
+        <button id="play-again-button"
+                class="primary-button"
+                aria-label="Play again (R key)">
+          Play Again
+        </button>
+        <button id="menu-button"
+                class="secondary-button"
+                aria-label="Return to main menu">
+          Main Menu
+        </button>
+      </nav>
+    </div>
+
+    <div id="error-screen" class="screen" role="alert">
       <h2>⚠️ Error</h2>
       <p id="error-message">Something went wrong</p>
-      <button id="retry-button" class="primary-button">Retry</button>
-      <button id="error-menu-button" class="secondary-button">Main Menu</button>
+      <nav aria-label="Error actions" class="menu-buttons">
+        <button id="retry-button"
+                class="primary-button"
+                aria-label="Retry">
+          Retry
+        </button>
+        <button id="error-menu-button"
+                class="secondary-button"
+                aria-label="Return to main menu">
+          Main Menu
+        </button>
+      </nav>
+    </div>
+
+    <!-- Keyboard help overlay -->
+    <div id="help-overlay" class="overlay" role="dialog" aria-labelledby="help-title" aria-modal="true" hidden>
+      <div class="overlay-content">
+        <h2 id="help-title">Keyboard Shortcuts</h2>
+        <table role="table" aria-label="Keyboard controls">
+          <thead>
+            <tr>
+              <th scope="col">Key</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><kbd>Space</kbd></td>
+              <td>Pause/Resume game</td>
+            </tr>
+            <tr>
+              <td><kbd>Esc</kbd></td>
+              <td>Pause game or go back</td>
+            </tr>
+            <tr>
+              <td><kbd>R</kbd></td>
+              <td>Restart challenge</td>
+            </tr>
+            <tr>
+              <td><kbd>M</kbd></td>
+              <td>Toggle audio mute</td>
+            </tr>
+            <tr>
+              <td><kbd>H</kbd></td>
+              <td>Toggle HUD visibility</td>
+            </tr>
+            <tr>
+              <td><kbd>P</kbd></td>
+              <td>Start practice mode</td>
+            </tr>
+            <tr>
+              <td><kbd>?</kbd></td>
+              <td>Show/hide this help</td>
+            </tr>
+            <tr>
+              <td><kbd>Tab</kbd></td>
+              <td>Navigate between elements</td>
+            </tr>
+            <tr>
+              <td><kbd>Enter</kbd></td>
+              <td>Activate focused button</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="close-help" class="primary-button" aria-label="Close help">Close</button>
+      </div>
     </div>
   </div>
 

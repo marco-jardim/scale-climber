@@ -8,10 +8,18 @@ import CanvasRenderer from './visuals/CanvasRenderer.js';
 import CharacterSprite from './visuals/CharacterSprite.js';
 import PitchMeter from './visuals/PitchMeter.js';
 import ParticleSystem from './visuals/ParticleSystem.js';
+import KeyboardControls from './utils/KeyboardControls.js';
+import AccessibilitySettings from './utils/AccessibilitySettings.js';
+import AudioFeedback from './utils/AudioFeedback.js';
+import ReferenceToneGenerator from './utils/ReferenceToneGenerator.js';
 
 // Global state
 let gameEngine = null;
 let renderer = null;
+let keyboardControls = null;
+let accessibilitySettings = null;
+let audioFeedback = null;
+let referenceTone = null;
 
 // Screen management
 const screens = {
@@ -104,6 +112,24 @@ function setupGameListeners() {
         combo: data.score.combo,
       });
     }
+
+    // Play audio feedback
+    if (audioFeedback) {
+      audioFeedback.playNoteResult(data.score.tier);
+      audioFeedback.playCombo(data.score.combo);
+    }
+
+    // Update score value for screen readers
+    const scoreValue = document.getElementById('score-value');
+    if (scoreValue) {
+      scoreValue.textContent = data.score.totalPoints;
+    }
+
+    // Update combo value for screen readers
+    const comboValue = document.getElementById('combo-value');
+    if (comboValue) {
+      comboValue.textContent = data.score.combo;
+    }
   });
 
   // Note misses
@@ -113,17 +139,35 @@ function setupGameListeners() {
         noteResult: 'MISS',
       });
     }
+
+    // Play miss sound
+    if (audioFeedback) {
+      audioFeedback.playNoteResult('MISS');
+    }
   });
 
   // Challenge complete
   gameEngine.on('challenge-complete', (data) => {
     showScreen('results');
     displayResults(data);
+
+    // Play victory sound
+    if (audioFeedback) {
+      audioFeedback.playVictory();
+    }
+
+    // Announce to screen readers
+    announceToScreenReader(`Challenge complete! Grade: ${data.grade}`);
   });
 
   // Challenge failed
   gameEngine.on('challenge-failed', (data) => {
     showError(`Challenge failed: ${data.reason}`);
+
+    // Play failure sound
+    if (audioFeedback) {
+      audioFeedback.playFailure();
+    }
   });
 }
 
@@ -146,39 +190,92 @@ function displayResults(data) {
   `;
 }
 
+/**
+ * Announce message to screen readers
+ * @param {string} message - Message to announce
+ */
+function announceToScreenReader(message) {
+  const announcer = document.getElementById('status-announce');
+  if (announcer) {
+    announcer.textContent = '';
+    setTimeout(() => {
+      announcer.textContent = message;
+    }, 100);
+  }
+}
+
+/**
+ * Toggle help overlay
+ */
+function toggleHelp() {
+  const helpOverlay = document.getElementById('help-overlay');
+  if (helpOverlay) {
+    const isHidden = helpOverlay.hasAttribute('hidden');
+    if (isHidden) {
+      helpOverlay.removeAttribute('hidden');
+      helpOverlay.focus();
+    } else {
+      helpOverlay.setAttribute('hidden', '');
+    }
+  }
+}
+
+/**
+ * Toggle HUD visibility
+ */
+function toggleHUD(visible) {
+  const hud = document.getElementById('hud');
+  if (hud) {
+    hud.style.display = visible ? 'flex' : 'none';
+  }
+}
+
 // Button event listeners
 document.getElementById('start-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   startChallenge();
 });
 
 document.getElementById('practice-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   console.log('Practice mode not yet implemented');
 });
 
 document.getElementById('settings-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   console.log('Settings not yet implemented');
 });
 
 document.getElementById('play-again-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   startChallenge();
 });
 
 document.getElementById('menu-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   showScreen('start');
 });
 
 document.getElementById('error-menu-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   showScreen('start');
 });
 
 document.getElementById('retry-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   showScreen('start');
 });
 
 document.getElementById('pause-button')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
   if (gameEngine) {
     gameEngine.pause();
   }
+});
+
+document.getElementById('close-help')?.addEventListener('click', () => {
+  if (audioFeedback) audioFeedback.playClick();
+  toggleHelp();
 });
 
 // Initialize app
@@ -197,6 +294,19 @@ async function initializeApp() {
       throw new Error('Microphone access not supported in this browser');
     }
 
+    // Initialize accessibility settings
+    accessibilitySettings = new AccessibilitySettings();
+    console.log('Accessibility settings initialized');
+
+    // Initialize audio feedback
+    audioFeedback = new AudioFeedback();
+    await audioFeedback.waitForLoad();
+    console.log('Audio feedback initialized');
+
+    // Initialize reference tone generator
+    referenceTone = new ReferenceToneGenerator();
+    console.log('Reference tone generator initialized');
+
     // Initialize game engine
     gameEngine = new GameEngine();
     const initResult = await gameEngine.initialize();
@@ -204,6 +314,17 @@ async function initializeApp() {
     if (!initResult.success) {
       throw new Error(initResult.error || 'Failed to initialize game engine');
     }
+
+    // Add mute toggle to game engine
+    gameEngine.toggleMute = () => {
+      const muted = audioFeedback.toggleMute();
+      return muted;
+    };
+
+    gameEngine.restart = () => {
+      // Reset game state and restart
+      showScreen('start');
+    };
 
     // Initialize renderer
     const canvas = document.getElementById('game-canvas');
@@ -215,6 +336,13 @@ async function initializeApp() {
     const particleSystem = new ParticleSystem();
 
     renderer.setComponents({ character, pitchMeter, particleSystem });
+
+    // Initialize keyboard controls
+    keyboardControls = new KeyboardControls(gameEngine, {
+      onHelp: toggleHelp,
+      onHUDToggle: toggleHUD,
+    });
+    console.log('Keyboard controls initialized');
 
     console.log('Scale Climber initialized successfully');
 
