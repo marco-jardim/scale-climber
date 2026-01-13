@@ -118,21 +118,9 @@ class CalibrationEngine {
     let consecutiveGoodSamples = 0;
     const requiredConsecutive = 3; // Need 3 good samples in a row
 
-    // DEBUG: Log first few samples to understand what we're receiving
-    let debugSampleCount = 0;
-    const MAX_DEBUG_SAMPLES = 10;
-
     while (Date.now() - startTime < duration) {
       const detection = await this.pitchDetector.detect();
       const { volume } = detection;
-
-      // DEBUG: Log first samples and any interesting values
-      if (debugSampleCount < MAX_DEBUG_SAMPLES || volume > 0.001) {
-        console.log(
-          `[CalibrationDebug] Sample ${debugSampleCount}: volume=${volume.toFixed(6)}, threshold=${CONFIG.VOLUME_THRESHOLD_PASS}, pass=${volume >= CONFIG.VOLUME_THRESHOLD_PASS}`,
-        );
-        debugSampleCount += 1;
-      }
 
       this.volumeSamples.push(volume);
       this.currentVolume = volume;
@@ -167,9 +155,6 @@ class CalibrationEngine {
     }
 
     // Check if max volume ever met threshold
-    console.log(
-      `[CalibrationDebug] Volume test complete. maxVolume=${this.maxVolume.toFixed(6)}, threshold=${CONFIG.VOLUME_THRESHOLD_PASS}, pass=${this.maxVolume >= CONFIG.VOLUME_THRESHOLD_PASS}`,
-    );
     return this.maxVolume >= CONFIG.VOLUME_THRESHOLD_PASS;
   }
 
