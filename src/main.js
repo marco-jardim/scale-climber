@@ -93,31 +93,84 @@ async function startCalibration() {
   try {
     showScreen('calibration');
 
+    // Initialize game engine audio (requires user gesture for browser autoplay policy)
+    const initResult = await gameEngine.initialize();
+    if (!initResult.success) {
+      throw new Error(initResult.error || 'Failed to initialize audio');
+    }
+
     // Resume AudioContext if suspended (required for Safari/iOS)
     if (gameEngine.audioManager) {
       await gameEngine.audioManager.resume();
     }
 
+    // Get UI elements
     const instruction = document.getElementById('calibration-instruction');
+    const volumeFill = document.getElementById('volume-meter-fill');
+    const volumePercent = document.getElementById('volume-percent');
+    const currentNoteValue = document.getElementById('current-note-value');
+    const samplesCounter = document.getElementById('calibration-samples');
+    const progressBar = document.getElementById('calibration-progress');
 
-    // Countdown: 3, 2, 1, Start!
-    instruction.textContent = 'Get ready... 3';
-    await sleep(1000);
+    // Quick countdown: 2, 1, Go!
     instruction.textContent = 'Get ready... 2';
-    await sleep(1000);
+    await sleep(800);
     instruction.textContent = 'Get ready... 1';
-    await sleep(1000);
+    await sleep(800);
     instruction.textContent = 'START SINGING! 🎤';
-    await sleep(500);
+    await sleep(400);
 
-    // Run calibration with real-time feedback
+    // Run calibration with real-time visual feedback
     const calibrationResult = await gameEngine.startCalibration((state, progress, message) => {
-      // Get current pitch detection
+      // Get current pitch detection from calibration engine
+      const { calibrationEngine } = gameEngine;
+      const volume = calibrationEngine?.getCurrentVolume() || 0;
       const lastResult = gameEngine.pitchDetector.getLastResult();
-      const noteInfo = lastResult?.note ? `♪ ${lastResult.note}` : '♪ ...';
-      const volumePercent = lastResult?.volume ? Math.round(lastResult.volume * 100) : 0;
+      const note = lastResult?.note || '--';
+      const volPct = Math.round(volume * 100);
 
-      instruction.textContent = `${message} | ${noteInfo} | Vol: ${volumePercent}%`;
+      // Update volume meter (fill from right to left, so we set the "empty" portion)
+      const fillWidth = Math.max(0, 100 - volPct);
+      volumeFill.style.width = `${fillWidth}%`;
+
+      // Update volume percentage with color coding
+      volumePercent.textContent = `${volPct}%`;
+      volumePercent.className = 'volume-meter-value';
+      if (volPct < 2) {
+        volumePercent.classList.add('low');
+      } else if (volPct < 5) {
+        volumePercent.classList.add('ok');
+      } else {
+        volumePercent.classList.add('good');
+      }
+
+      // Update current note display
+      if (note !== '--' && note !== currentNoteValue.textContent) {
+        currentNoteValue.textContent = note;
+        currentNoteValue.classList.add('active');
+        setTimeout(() => currentNoteValue.classList.remove('active'), 300);
+      } else if (note === '--') {
+        currentNoteValue.textContent = '--';
+      }
+
+      // Update samples counter (extract from message if available)
+      const samplesMatch = message.match(/(\d+)\/(\d+) notes/);
+      if (samplesMatch) {
+        samplesCounter.textContent = `${samplesMatch[1]} / ${samplesMatch[2]} notes`;
+      } else if (message.includes('notes detected')) {
+        const countMatch = message.match(/(\d+) notes/);
+        if (countMatch) {
+          samplesCounter.textContent = `${countMatch[1]} / 10 notes`;
+        }
+      }
+
+      // Update progress bar
+      const progressPct = Math.round(progress * 100);
+      progressBar.style.setProperty('--progress', `${progressPct}%`);
+      progressBar.setAttribute('aria-valuenow', progressPct);
+
+      // Update instruction text
+      instruction.textContent = message;
     });
 
     if (!calibrationResult.success) {
@@ -453,19 +506,19 @@ if ('serviceWorker' in navigator) {
         console.log('Service Worker registered:', registration.scope);
 
         // Check for updates every hour
-        setInterval(() => {
-          registration.update();
-        }, 60 * 60 * 1000);
+        setInterval(
+          () => {
+            registration.update();
+          },
+          60 * 60 * 1000,
+        );
 
         // Listen for updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
-              if (
-                newWorker.state === 'installed'
-                && navigator.serviceWorker.controller
-              ) {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                 // New version available
                 showUpdateNotification();
               }

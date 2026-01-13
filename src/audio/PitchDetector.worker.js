@@ -141,8 +141,7 @@ function detectPitch(buffer) {
   // Calculate clarity (how distinct the pitch is)
   // Based on ratio of minimum to average
   const minValue = normalizedBuffer[Math.round(tau)];
-  const avgValue =
-    normalizedBuffer.reduce((sum, val) => sum + val, 0) / normalizedBuffer.length;
+  const avgValue = normalizedBuffer.reduce((sum, val) => sum + val, 0) / normalizedBuffer.length;
   const clarity = avgValue > 0 ? 1 - minValue / avgValue : 0;
 
   return {
@@ -193,8 +192,9 @@ self.onmessage = function (e) {
       const volume = calculateVolume(buffer);
 
       // Only detect pitch if volume is above threshold
+      // Lowered to 0.005 to allow quiet mics/environments
       let result;
-      if (volume < 0.01) {
+      if (volume < 0.005) {
         // Too quiet, no pitch detection
         result = {
           frequency: null,

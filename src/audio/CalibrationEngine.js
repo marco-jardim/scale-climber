@@ -1,8 +1,29 @@
 /**
  * CalibrationEngine
  * Automatically detects user's comfortable voice range and recommends octave
- * Three-phase process: volume test → range detection → analysis
+ * Two-phase process: volume test → range detection → analysis
+ * Optimized for faster feedback and lower volume thresholds
  */
+
+// Configuration constants
+const CONFIG = {
+  // Volume thresholds (after RMS * 10 scaling in AudioContextManager)
+  // Typical singing RMS is 0.002-0.01, so after 10x = 0.02-0.1
+  // Set thresholds very low to accommodate quiet mics/environments
+  VOLUME_THRESHOLD_PASS: 0.008, // Very low - just need some signal
+  VOLUME_THRESHOLD_PITCH: 0.008, // Match pass threshold
+  VOLUME_THRESHOLD_GOOD: 0.03, // Volume considered "good"
+
+  // Timing
+  VOLUME_TEST_DURATION: 1500, // 1.5 seconds
+  RANGE_DETECT_DURATION: 6000, // 6 seconds
+  VOLUME_SAMPLE_INTERVAL: 50, // Fast sampling
+  RANGE_SAMPLE_INTERVAL: 150, // Fast sampling
+
+  // Requirements
+  MIN_PITCH_SAMPLES: 10,
+  PITCH_CONFIDENCE_THRESHOLD: 0.3, // Relaxed further
+};
 
 class CalibrationEngine {
   constructor(pitchDetector) {
@@ -12,6 +33,8 @@ class CalibrationEngine {
     this.pitchSamples = [];
     this.result = null;
     this.onProgressCallback = null;
+    this.currentVolume = 0; // Real-time volume for UI
+    this.maxVolume = 0; // Track max volume during test
   }
 
   /**
@@ -30,34 +53,34 @@ class CalibrationEngine {
     this.onProgressCallback = onProgress;
 
     try {
-      // Phase 1: Volume Test (3 seconds)
+      // Phase 1: Volume Test (1.5 seconds, early exit on success)
       this.state = 'volume_test';
       this.reportProgress(0, 'Testing microphone volume...');
-      await this.runVolumeTest(3000);
+      const volumeTestPassed = await this.runVolumeTest(CONFIG.VOLUME_TEST_DURATION);
 
-      // Check if microphone is working
-      const avgVolume = this.volumeSamples.reduce((sum, v) => sum + v, 0)
-        / this.volumeSamples.length;
-
-      if (avgVolume < 0.05) {
+      if (!volumeTestPassed) {
         return {
           success: false,
           error: 'VOLUME_TOO_LOW',
-          message: 'Microphone not detecting sound. Please speak or sing louder.',
+          message:
+            `Microphone volume too low (max: ${Math.round(this.maxVolume * 100)}%). `
+            + 'Please sing louder or check mic settings.',
         };
       }
 
-      // Phase 2: Range Detection (10 seconds)
+      // Phase 2: Range Detection (6 seconds, early exit when enough samples)
       this.state = 'range_detect';
       this.reportProgress(0.3, 'Detecting vocal range... Sing from low to high notes');
-      await this.runRangeDetection(10000);
+      await this.runRangeDetection(CONFIG.RANGE_DETECT_DURATION);
 
       // Check if enough pitch samples collected
-      if (this.pitchSamples.length < 10) {
+      if (this.pitchSamples.length < CONFIG.MIN_PITCH_SAMPLES) {
         return {
           success: false,
           error: 'INSUFFICIENT_DATA',
-          message: 'Not enough pitch data. Please sing more notes.',
+          message:
+            `Only ${this.pitchSamples.length} notes detected `
+            + `(need ${CONFIG.MIN_PITCH_SAMPLES}). Please sing more clearly.`,
         };
       }
 
@@ -85,36 +108,89 @@ class CalibrationEngine {
 
   /**
    * Phase 1: Run volume test
-   * @param {number} duration - Test duration in ms
+   * Returns true if volume threshold met, false otherwise
+   * Early exits as soon as sufficient volume detected
+   * @param {number} duration - Max test duration in ms
+   * @returns {Promise<boolean>}
    */
   async runVolumeTest(duration) {
     const startTime = Date.now();
-    const sampleInterval = 100; // Sample every 100ms
+    let consecutiveGoodSamples = 0;
+    const requiredConsecutive = 3; // Need 3 good samples in a row
+
+    // DEBUG: Log first few samples to understand what we're receiving
+    let debugSampleCount = 0;
+    const MAX_DEBUG_SAMPLES = 10;
 
     while (Date.now() - startTime < duration) {
       const detection = await this.pitchDetector.detect();
-      this.volumeSamples.push(detection.volume);
+      const { volume } = detection;
+
+      // DEBUG: Log first samples and any interesting values
+      if (debugSampleCount < MAX_DEBUG_SAMPLES || volume > 0.001) {
+        console.log(
+          `[CalibrationDebug] Sample ${debugSampleCount}: volume=${volume.toFixed(6)}, threshold=${CONFIG.VOLUME_THRESHOLD_PASS}, pass=${volume >= CONFIG.VOLUME_THRESHOLD_PASS}`,
+        );
+        debugSampleCount += 1;
+      }
+
+      this.volumeSamples.push(volume);
+      this.currentVolume = volume;
+      this.maxVolume = Math.max(this.maxVolume, volume);
+
+      // Check for early success (consecutive good volumes)
+      if (volume >= CONFIG.VOLUME_THRESHOLD_PASS) {
+        consecutiveGoodSamples += 1;
+        if (consecutiveGoodSamples >= requiredConsecutive) {
+          this.reportProgress(0.3, 'Microphone OK!');
+          return true;
+        }
+      } else {
+        consecutiveGoodSamples = 0;
+      }
 
       const progress = (Date.now() - startTime) / duration;
-      this.reportProgress(progress * 0.3, 'Testing microphone volume...');
+      const volumePercent = Math.round(volume * 100);
+      let volumeStatus = '✗';
+      if (volume >= CONFIG.VOLUME_THRESHOLD_GOOD) {
+        volumeStatus = '✓';
+      } else if (volume >= CONFIG.VOLUME_THRESHOLD_PASS) {
+        volumeStatus = '~';
+      }
 
-      await this.sleep(sampleInterval);
+      this.reportProgress(
+        progress * 0.3,
+        `Testing mic... Volume: ${volumePercent}% ${volumeStatus}`,
+      );
+
+      await this.sleep(CONFIG.VOLUME_SAMPLE_INTERVAL);
     }
+
+    // Check if max volume ever met threshold
+    console.log(
+      `[CalibrationDebug] Volume test complete. maxVolume=${this.maxVolume.toFixed(6)}, threshold=${CONFIG.VOLUME_THRESHOLD_PASS}, pass=${this.maxVolume >= CONFIG.VOLUME_THRESHOLD_PASS}`,
+    );
+    return this.maxVolume >= CONFIG.VOLUME_THRESHOLD_PASS;
   }
 
   /**
    * Phase 2: Run range detection
-   * @param {number} duration - Test duration in ms
+   * Early exits when enough pitch samples collected
+   * @param {number} duration - Max test duration in ms
    */
   async runRangeDetection(duration) {
     const startTime = Date.now();
-    const sampleInterval = 200; // Sample every 200ms
 
     while (Date.now() - startTime < duration) {
       const detection = await this.pitchDetector.detect();
+      this.currentVolume = detection.volume;
 
       // Only record confident pitch detections (relaxed thresholds)
-      if (detection.frequency && detection.confidence > 0.5 && detection.volume > 0.05) {
+      const isValidPitch = detection.frequency
+        && detection.confidence > CONFIG.PITCH_CONFIDENCE_THRESHOLD
+        && detection.volume > CONFIG.VOLUME_THRESHOLD_PITCH;
+
+      if (isValidPitch) {
         this.pitchSamples.push({
           frequency: detection.frequency,
           note: detection.note,
@@ -123,16 +199,24 @@ class CalibrationEngine {
         });
       }
 
-      const progress = 0.3 + ((Date.now() - startTime) / duration) * 0.6;
-      const remaining = Math.ceil((duration - (Date.now() - startTime)) / 1000);
+      const elapsed = Date.now() - startTime;
+      const progress = 0.3 + (elapsed / duration) * 0.6;
+      const remaining = Math.ceil((duration - elapsed) / 1000);
       const samplesCollected = this.pitchSamples.length;
+      const currentNote = detection.note || '--';
+      const volumePercent = Math.round(detection.volume * 100);
 
-      this.reportProgress(
-        progress,
-        `Sing from low to high... ${samplesCollected} notes detected (${remaining}s)`,
-      );
+      // Early exit if we have enough samples
+      if (samplesCollected >= CONFIG.MIN_PITCH_SAMPLES) {
+        this.reportProgress(0.9, `${samplesCollected} notes detected - analyzing...`);
+        return;
+      }
 
-      await this.sleep(sampleInterval);
+      const statusMsg = `♪ ${currentNote} | Vol: ${volumePercent}% | `
+        + `${samplesCollected}/${CONFIG.MIN_PITCH_SAMPLES} notes (${remaining}s)`;
+      this.reportProgress(progress, statusMsg);
+
+      await this.sleep(CONFIG.RANGE_SAMPLE_INTERVAL);
     }
   }
 
@@ -221,6 +305,27 @@ class CalibrationEngine {
     this.volumeSamples = [];
     this.pitchSamples = [];
     this.result = null;
+    this.currentVolume = 0;
+    this.maxVolume = 0;
+  }
+
+  /**
+   * Get current real-time volume (for UI visualization)
+   * @returns {number} Volume 0-1
+   */
+  getCurrentVolume() {
+    return this.currentVolume;
+  }
+
+  /**
+   * Get volume thresholds for UI
+   * @returns {{pass: number, good: number}}
+   */
+  static getVolumeThresholds() {
+    return {
+      pass: CONFIG.VOLUME_THRESHOLD_PASS,
+      good: CONFIG.VOLUME_THRESHOLD_GOOD,
+    };
   }
 
   /**

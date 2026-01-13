@@ -216,7 +216,7 @@ class TitleScreenManager {
     let pitchData = null;
     let volume = 0;
 
-    if (this.gameEngine.pitchDetector) {
+    if (this.gameEngine.pitchDetector?.isInitialized) {
       pitchData = await this.gameEngine.pitchDetector.detect(); // Use async/await if detect is async
       volume = pitchData?.volume || 0;
     }

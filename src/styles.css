@@ -7,34 +7,34 @@
 
 :root {
   /* Phase 3 Design System - Score Tier Colors */
-  --color-perfect: #FFD700;
-  --color-great: #32CD32;
-  --color-good: #00BFFF;
-  --color-ok: #FFA500;
-  --color-miss: #FF4444;
+  --color-perfect: #ffd700;
+  --color-great: #32cd32;
+  --color-good: #00bfff;
+  --color-ok: #ffa500;
+  --color-miss: #ff4444;
 
   /* Background & Environment */
-  --color-bg-sky-start: #87CEEB;
-  --color-bg-sky-end: #E0F6FF;
-  --color-mountain: #8B7BB8;
-  --color-character-primary: #20B2AA;
+  --color-bg-sky-start: #87ceeb;
+  --color-bg-sky-end: #e0f6ff;
+  --color-mountain: #8b7bb8;
+  --color-character-primary: #20b2aa;
 
   /* Text Colors */
-  --color-text-primary: #2C3E50;
-  --color-text-secondary: #7F8C8D;
+  --color-text-primary: #2c3e50;
+  --color-text-secondary: #7f8c8d;
   --color-text-light: #ffffff;
 
   /* Legacy colors for backwards compatibility */
-  --color-primary: #20B2AA;
-  --color-secondary: #8B7BB8;
-  --color-accent: #FFD700;
-  --color-success: #32CD32;
-  --color-warning: #FFA500;
-  --color-error: #FF4444;
-  --color-bg: #87CEEB;
-  --color-bg-light: #E0F6FF;
-  --color-bg-night: #050B14; /* Basecamp Night */
-  --color-text: #2C3E50;
+  --color-primary: #20b2aa;
+  --color-secondary: #8b7bb8;
+  --color-accent: #ffd700;
+  --color-success: #32cd32;
+  --color-warning: #ffa500;
+  --color-error: #ff4444;
+  --color-bg: #87ceeb;
+  --color-bg-light: #e0f6ff;
+  --color-bg-night: #050b14; /* Basecamp Night */
+  --color-text: #2c3e50;
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -49,13 +49,13 @@
   --font-mono: 'Courier New', monospace;
 
   /* Font sizes (rem) */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.5rem;    /* 24px */
-  --text-2xl: 2rem;     /* 32px */
-  --text-3xl: 3rem;     /* 48px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.5rem; /* 24px */
+  --text-2xl: 2rem; /* 32px */
+  --text-3xl: 3rem; /* 48px */
 
   /* Legacy font sizes */
   --font-family: var(--font-secondary);
@@ -148,7 +148,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 100px rgba(0,0,0,0.5); /* Cinematic shadow */
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5); /* Cinematic shadow */
   background: black; /* Letterbox fill */
 }
 
@@ -367,7 +367,7 @@ button:focus-visible {
 }
 
 .calibration-instructions .tip-box {
-  background-color: #FFF9E6;
+  background-color: #fff9e6;
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   border-left: 4px solid var(--color-warning);
@@ -389,13 +389,156 @@ button:focus-visible {
   margin-bottom: var(--spacing-lg);
 }
 
+/* Calibration Visual Feedback */
+.calibration-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--border-radius-lg);
+  min-height: 140px;
+}
+
+.volume-meter-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.volume-meter-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 60px;
+  font-size: var(--text-sm);
+}
+
+.volume-meter-track {
+  flex: 1;
+  height: 24px;
+  background: linear-gradient(
+    to right,
+    var(--color-error) 0%,
+    var(--color-warning) 30%,
+    var(--color-success) 60%,
+    var(--color-success) 100%
+  );
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.volume-meter-fill {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-bg-light);
+  transition: width 0.05s ease-out;
+  width: 100%;
+}
+
+.volume-meter-threshold {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  background: var(--color-text);
+  border-radius: 2px;
+  left: 20%; /* Default position, updated via JS */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.volume-meter-threshold::after {
+  content: 'min';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.volume-meter-value {
+  min-width: 50px;
+  font-weight: 700;
+  font-size: var(--text-lg);
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.volume-meter-value.low {
+  color: var(--color-error);
+}
+
+.volume-meter-value.ok {
+  color: var(--color-warning);
+}
+
+.volume-meter-value.good {
+  color: var(--color-success);
+}
+
+.current-note-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-bg-light);
+  border-radius: var(--border-radius);
+}
+
+.note-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.note-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  min-width: 80px;
+  text-align: center;
+}
+
+.note-value.active {
+  color: var(--color-success);
+  animation: notePulse 0.3s ease;
+}
+
+@keyframes notePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.calibration-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
 #calibration-progress {
   width: 100%;
-  height: 8px;
+  height: 16px;
   background-color: var(--color-bg-light);
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: var(--spacing-md) 0;
 }
 
 #calibration-progress::after {
@@ -404,9 +547,23 @@ button:focus-visible {
   left: 0;
   top: 0;
   height: 100%;
-  width: 0%;
-  background-color: var(--color-primary);
-  transition: width 0.3s ease;
+  width: var(--progress, 0%);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-success, #4caf50));
+  transition: width 0.15s ease;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+}
+
+#calibration-progress[aria-valuenow="100"]::after {
+  background: var(--color-success, #4caf50);
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
+}
+
+.samples-counter {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-weight: 600;
 }
 
 /* Error screen */
@@ -585,17 +742,17 @@ button:focus-visible {
 
 /* High contrast mode */
 .high-contrast {
-  --color-perfect: #00FF00;
-  --color-great: #FFFF00;
-  --color-good: #FFA500;
-  --color-ok: #FF6600;
-  --color-miss: #FF0000;
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #CCCCCC;
+  --color-perfect: #00ff00;
+  --color-great: #ffff00;
+  --color-good: #ffa500;
+  --color-ok: #ff6600;
+  --color-miss: #ff0000;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
   --color-bg: #000000;
   --color-bg-light: #1a1a1a;
-  --color-primary: #00AAFF;
-  --color-secondary: #AA00FF;
+  --color-primary: #00aaff;
+  --color-secondary: #aa00ff;
 }
 
 .high-contrast button {
@@ -603,39 +760,39 @@ button:focus-visible {
 }
 
 .high-contrast *:focus-visible {
-  outline: 4px solid #FFFF00;
+  outline: 4px solid #ffff00;
   outline-offset: 4px;
 }
 
 /* Colorblind mode: Deuteranopia (red-green) */
-[data-colorblind-mode="deuteranopia"] {
-  --color-perfect: #0088FF;
-  --color-great: #FFDD00;
-  --color-good: #FF8800;
-  --color-ok: #FF6600;
-  --color-miss: #FF0066;
+[data-colorblind-mode='deuteranopia'] {
+  --color-perfect: #0088ff;
+  --color-great: #ffdd00;
+  --color-good: #ff8800;
+  --color-ok: #ff6600;
+  --color-miss: #ff0066;
 }
 
 /* Colorblind mode: Protanopia (red-blind) */
-[data-colorblind-mode="protanopia"] {
-  --color-perfect: #0088FF;
-  --color-great: #FFDD00;
-  --color-good: #FF8800;
-  --color-ok: #FF6600;
-  --color-miss: #8800FF;
+[data-colorblind-mode='protanopia'] {
+  --color-perfect: #0088ff;
+  --color-great: #ffdd00;
+  --color-good: #ff8800;
+  --color-ok: #ff6600;
+  --color-miss: #8800ff;
 }
 
 /* Colorblind mode: Tritanopia (blue-yellow) */
-[data-colorblind-mode="tritanopia"] {
-  --color-perfect: #FF00FF;
-  --color-great: #00FFFF;
-  --color-good: #FF8800;
-  --color-ok: #FF6600;
-  --color-miss: #FF0000;
+[data-colorblind-mode='tritanopia'] {
+  --color-perfect: #ff00ff;
+  --color-great: #00ffff;
+  --color-good: #ff8800;
+  --color-ok: #ff6600;
+  --color-miss: #ff0000;
 }
 
 /* Colorblind patterns (additional visual indicators) */
-[data-colorblind-mode]:not([data-colorblind-mode="none"]) .grade::before {
+[data-colorblind-mode]:not([data-colorblind-mode='none']) .grade::before {
   content: '●';
   margin-right: var(--spacing-sm);
 }
@@ -753,7 +910,7 @@ button:focus-visible {
   font-family: var(--font-primary);
   font-size: var(--text-lg);
   color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: 700;
   letter-spacing: 0.5px;
 }
@@ -818,7 +975,7 @@ button:focus-visible {
   color: white;
   margin-bottom: var(--spacing-xs);
   font-size: var(--text-2xl);
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 #ts-subhead {
@@ -830,7 +987,7 @@ button:focus-visible {
 
 .primary-morph-btn {
   background: white;
-  color: #0F1A2A;
+  color: #0f1a2a;
   font-weight: 700;
   font-size: var(--text-lg);
   padding: 16px 32px;
@@ -851,20 +1008,26 @@ button:focus-visible {
   opacity: 0.7;
   cursor: default;
   transform: none;
-  background: #E0E0E0;
+  background: #e0e0e0;
   color: #888;
 }
 
 .primary-morph-btn.pulse-success {
-  background: #00FF88;
+  background: #00ff88;
   color: #003311;
   animation: btnPulse 1.5s infinite;
 }
 
 @keyframes btnPulse {
-  0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
-  70% { box-shadow: 0 0 0 15px rgba(0, 255, 136, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 255, 136, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
+  }
 }
 
 .helper-text {
@@ -878,7 +1041,7 @@ button:focus-visible {
   height: 20px;
   margin-top: var(--spacing-md);
   font-size: var(--text-sm);
-  color: #00FF88;
+  color: #00ff88;
   font-weight: 600;
   opacity: 0.8;
 }
